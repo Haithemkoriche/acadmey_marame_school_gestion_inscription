@@ -87,9 +87,9 @@
           }
 
           // Vérification des actions de validation et de suppression
-          if (isset($_POST['action'])) {
+          if (isset($_POST['action_reg'])) {
             $id = $_POST['id'];
-            $action = $_POST['action'];
+            $action = $_POST['action_reg'];
 
             if ($action === 'validate') {
               // Effectuer des opérations de validation ici
@@ -160,12 +160,12 @@
               echo '<td>
               <form method="POST" action="">
                 <input type="hidden" name="id" value="' . $row["id_ins"] . '">
-                <input type="hidden" name="action" value="validate">
+                <input type="hidden" name="actioni_reg" value="validate">
                 <button type="submit" class="btn btn-success mr-2">Validate</button>
               </form>
               <form method="POST" action="">
                 <input type="hidden" name="id" value="' . $row["id_ins"] . '">
-                <input type="hidden" name="action" value="delete">
+                <input type="hidden" name="action_reg" value="delete">
                 <button type="submit" class="btn btn-danger">Delete</button>
               </form>
             </td>';
@@ -491,13 +491,13 @@
 
               // Insertion du nouvel instructeur dans la base de données
               $insertSql = "INSERT INTO instructors (instructor_name, instructor_specialty, instructor_email, instructor_phone)
-            VALUES ('$instructorName', '$instructorSpecialty', '$instructorEmail', '$instructorPhone')";
+      VALUES ('$instructorName', '$instructorSpecialty', '$instructorEmail', '$instructorPhone')";
               if (mysqli_query($conn, $insertSql)) {
                 echo '<div class="alert alert-success" role="alert">Instructor added successfully.</div>';
               } else {
                 echo '<div class="alert alert-danger" role="alert">Error adding instructor: ' . mysqli_error($conn) . '</div>';
               }
-            } elseif ($action === 'update') {
+            } elseif ($action === 'update_ins') {
               // Récupération des données du formulaire de mise à jour
               $instructorId = $_POST['instructor_id'];
               $instructorName = $_POST['instructor_name'];
@@ -506,11 +506,11 @@
               $instructorPhone = $_POST['instructor_phone'];
 
               // Mise à jour de l'instructeur dans la base de données
-              $updateSql = "UPDATE instructors 
-            SET instructor_name = '$instructorName', instructor_specialty = '$instructorSpecialty', 
-            instructor_email = '$instructorEmail', instructor_phone = '$instructorPhone'
-            WHERE instructor_id = $instructorId";
-              if (mysqli_query($conn, $updateSql)) {
+              $updateSql_ins = "UPDATE instructors 
+      SET instructor_name = '$instructorName', instructor_specialty = '$instructorSpecialty', 
+      instructor_email = '$instructorEmail', instructor_phone = '$instructorPhone'
+      WHERE instructor_id = $instructorId";
+              if (mysqli_query($conn, $updateSql_ins)) {
                 echo '<div class="alert alert-success" role="alert">Instructor updated successfully.</div>';
               } else {
                 echo '<div class="alert alert-danger" role="alert">Error updating instructor: ' . mysqli_error($conn) . '</div>';
@@ -537,17 +537,17 @@
 
           if (mysqli_num_rows($result) > 0) {
             echo '<table class="table">
-      <thead>
-        <tr>
-          <th>Instructor ID</th>
-          <th>Name</th>
-          <th>Specialty</th>
-          <th>Email</th>
-          <th>Phone</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>';
+    <thead>
+      <tr>
+        <th>Instructor ID</th>
+        <th>Name</th>
+        <th>Specialty</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>';
 
             while ($row = mysqli_fetch_assoc($result)) {
               echo '<tr>';
@@ -557,49 +557,48 @@
               echo '<td>' . $row["instructor_email"] . '</td>';
               echo '<td>' . $row["instructor_phone"] . '</td>';
               echo '<td>
-                <a href="#" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editInstructorModal-' . $row["instructor_id"] . '">Edit</a>
-                <a href="?delete_ins=' . $row["instructor_id"] . '" class="btn btn-danger btn-sm" onclick="return confirm(\'Are you sure you want to delete this instructor?\')">Delete</a>
-              </td>';
+          <a href="#" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editInstructorModal-' . $row["instructor_id"] . '">Edit</a>
+          <a href="?delete_ins=' . $row["instructor_id"] . '" class="btn btn-danger btn-sm" onclick="return confirm(\'Are you sure you want to delete this instructor?\')">Delete</a>
+        </td>';
               echo '</tr>';
 
               // Modal pour la modification de l'instructeur
               echo '<div class="modal fade" id="editInstructorModal-' . $row["instructor_id"] . '" tabindex="-1" aria-labelledby="editInstructorModalLabel-' . $row["instructor_id"] . '" aria-hidden="true">
-                <div class="modal-dialog">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h5 class="modal-title" id="editInstructorModalLabel-' . $row["instructor_id"] . '">Edit Instructor</h5>
-                      <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                      </button>
-                    </div>
-                    <div class="modal-body">
-                      <form action="" method="post">
-                        <input type="hidden" name="action" value="update">
-                        <input type="hidden" name="instructor_id" value="' . $row["instructor_id"] . '">
-                        <div class="form-group">
-                          <label for="editInstructorName">Name:</label>
-                          <input type="text" class="form-control" id="editInstructorName" name="instructor_name" value="' . $row["instructor_name"] . '" required>
-                        </div>
-                        <div class="form-group">
-                          <label for="editInstructorSpecialty">Specialty:</label>
-                          <input type="text" class="form-control" id="editInstructorSpecialty" name="instructor_specialty" value="' . $row["instructor_specialty"] . '" required>
-                        </div>
-                        <div class="form-group">
-                          <label for="editInstructorEmail">Email:</label>
-                          <input type="email" class="form-control" id="editInstructorEmail" name="instructor_email" value="' . $row["instructor_email"] . '" required>
-                        </div>
-                        <div class="form-group">
-                          <label for="editInstructorPhone">Phone:</label>
-                          <input type="text" class="form-control" id="editInstructorPhone" name="instructor_phone" value="' . $row["instructor_phone"] . '" required>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Save Changes</button>
-                      </form>
-                    </div>
-                  </div>
-                </div>
-              </div>';
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="editInstructorModalLabel-' . $row["instructor_id"] . '">Edit Instructor</h5>
+            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form action="" method="post">
+              <input type="hidden" name="action" value="update_ins">
+              <input type="hidden" name="instructor_id" value="' . $row["instructor_id"] . '">
+              <div class="form-group">
+                <label for="editInstructorName">Name:</label>
+                <input type="text" class="form-control" id="editInstructorName" name="instructor_name" value="' . $row["instructor_name"] . '" required>
+              </div>
+              <div class="form-group">
+                <label for="editInstructorSpecialty">Specialty:</label>
+                <input type="text" class="form-control" id="editInstructorSpecialty" name="instructor_specialty" value="' . $row["instructor_specialty"] . '" required>
+              </div>
+              <div class="form-group">
+                <label for="editInstructorEmail">Email:</label>
+                <input type="email" class="form-control" id="editInstructorEmail" name="instructor_email" value="' . $row["instructor_email"] . '" required>
+              </div>
+              <div class="form-group">
+                <label for="editInstructorPhone">Phone:</label>
+                <input type="text" class="form-control" id="editInstructorPhone" name="instructor_phone" value="' . $row["instructor_phone"] . '" required>
+              </div>
+              <button type="submit" class="btn btn-primary">Save Changes</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>';
             }
-
 
             echo '</tbody></table>';
           } else {
@@ -609,149 +608,82 @@
           // Fermeture de la connexion à la base de données
           mysqli_close($conn);
           ?>
+        </div>
 
-          <!-- Add Instructor Modal -->
-          <div class="modal fade" id="addInstructorModal" tabindex="-1" aria-labelledby="addInstructorModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="addInstructorModalLabel">Add Instructor</h5>
-                  <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-                <div class="modal-body">
-                  <form action="" method="post">
-                    <input type="hidden" name="action" value="add">
-                    <div class="form-group">
-                      <label for="instructorName">Name:</label>
-                      <input type="text" class="form-control" id="instructorName" name="instructor_name" required>
-                    </div>
-                    <div class="form-group">
-                      <label for="instructorSpecialty">Specialty:</label>
-                      <input type="text" class="form-control" id="instructorSpecialty" name="instructor_specialty" required>
-                    </div>
-                    <div class="form-group">
-                      <label for="instructorEmail">Email:</label>
-                      <input type="email" class="form-control" id="instructorEmail" name="instructor_email" required>
-                    </div>
-                    <div class="form-group">
-                      <label for="instructorPhone">Phone:</label>
-                      <input type="text" class="form-control" id="instructorPhone" name="instructor_phone" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Add Instructor</button>
-                  </form>
-                </div>
+        <!-- Add Instructor Modal -->
+        <div class="modal fade" id="addInstructorModal" tabindex="-1" aria-labelledby="addInstructorModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="addInstructorModalLabel">Add Instructor</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <form action="" method="post">
+                  <input type="hidden" name="action" value="add">
+                  <div class="form-group">
+                    <label for="instructorName">Name:</label>
+                    <input type="text" class="form-control" id="instructorName" name="instructor_name" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="instructorSpecialty">Specialty:</label>
+                    <input type="text" class="form-control" id="instructorSpecialty" name="instructor_specialty" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="instructorEmail">Email:</label>
+                    <input type="email" class="form-control" id="instructorEmail" name="instructor_email" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="instructorPhone">Phone:</label>
+                    <input type="text" class="form-control" id="instructorPhone" name="instructor_phone" required>
+                  </div>
+                  <button type="submit" class="btn btn-primary">Add Instructor</button>
+                </form>
               </div>
             </div>
           </div>
         </div>
 
-      </div>
-    </div>
-  </div>
-
-  <!-- Logout Modal -->
-  <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="logoutModalLabel">Confirm Logout</h5>
-          <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <p>Are you sure you want to logout?</p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-          <a href="logout.php" class="btn btn-primary">Logout</a>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Add Course Modal -->
-  <div class="modal fade" id="addCourseModal" tabindex="-1" role="dialog" aria-labelledby="addCourseModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="addCourseModalLabel">Add Course</h5>
-          <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <form action="" method="post" enctype="multipart/form-data">
-            <input type="hidden" name="action" value="add">
-            <div class="form-group">
-              <label for="courseName">Course Name:</label>
-              <input type="text" class="form-control" id="courseName" name="course_name" required>
+        <!-- Logout Modal -->
+        <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="logoutModalLabel">Confirm Logout</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <p>Are you sure you want to logout?</p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <a href="logout.php" class="btn btn-primary">Logout</a>
+              </div>
             </div>
-            <div class="form-group">
-              <label for="courseDescription">Course Description:</label>
-              <textarea class="form-control" id="courseDescription" name="course_description" rows="3" required></textarea>
-            </div>
-            <div class="form-group">
-              <label for="instructorId">Instructor:</label>
-              <select class="form-control" id="instructorId" name="instructor_id" required>
-                <option value="">Select an Instructor</option>
-
-                <?php
-                // Connexion à la base de données
-                $conn = mysqli_connect("localhost", "root", "", "ams");
-
-                // Vérification de la connexion
-                if (!$conn) {
-                  die("Connection failed: " . mysqli_connect_error());
-                }
-
-                // Récupération des instructeurs
-                $instructorsSql = "SELECT * FROM instructors";
-                $instructorsResult = mysqli_query($conn, $instructorsSql);
-
-                while ($instructorRow = mysqli_fetch_assoc($instructorsResult)) {
-                  echo '<option value="' . $instructorRow["instructor_id"] . '">' . $instructorRow["instructor_name"] . '</option>';
-                }
-
-                // Fermeture de la connexion à la base de données
-                mysqli_close($conn);
-                ?>
-
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="courseImage">Course Image:</label>
-              <input type="file" class="form-control-file" id="courseImage" name="course_image" required>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <button type="submit" class="btn btn-primary">Add Course</button>
-            </div>
-          </form>
+          </div>
         </div>
-      </div>
-    </div>
-  </div>
 
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="../asstes/bootstrap/js/bootstrap.min.js"></script>
-  <script>
-    $(document).ready(function() {
-      // Gérer la navigation en fonction des clics sur les liens du menu
-      $('.nav-link').click(function() {
-        var target = $(this).data('target');
-        $('.content').hide();
-        $('#' + target).show();
-      });
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="../asstes/bootstrap/js/bootstrap.min.js"></script>
+        <script>
+          $(document).ready(function() {
+            // Gérer la navigation en fonction des clics sur les liens du menu
+            $('.nav-link').click(function() {
+              var target = $(this).data('target');
+              $('.content').hide();
+              $('#' + target).show();
+            });
 
-      // Gérer la déconnexion
-      $('#btn-logout').click(function() {
-        $('#logoutModal').modal('show');
-      });
-    });
-  </script>
+            // Gérer la déconnexion
+            $('#btn-logout').click(function() {
+              $('#logoutModal').modal('show');
+            });
+          });
+        </script>
 </body>
 
 </html>
