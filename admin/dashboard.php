@@ -1,3 +1,4 @@
+<?php require_once "../config/bdd.php"; ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -78,13 +79,7 @@
           <h1>Registrations</h1>
 
           <?php
-          // Connexion à la base de données
-          $conn = mysqli_connect("localhost", "root", "", "ams");
 
-          // Vérification de la connexion
-          if (!$conn) {
-            die("Connection failed: " . mysqli_connect_error());
-          }
 
           // Vérification des actions de validation et de suppression
           if (isset($_POST['action_reg'])) {
@@ -177,8 +172,7 @@
             echo '<p>No registrations found.</p>';
           }
 
-          // Fermeture de la connexion à la base de données
-          mysqli_close($conn);
+
           ?>
         </div>
 
@@ -188,13 +182,6 @@
           <h1>Contacts</h1>
 
           <?php
-          // Connexion à la base de données
-          $conn = mysqli_connect("localhost", "root", "", "ams");
-
-          // Vérification de la connexion
-          if (!$conn) {
-            die("Connection failed: " . mysqli_connect_error());
-          }
 
           // Vérification si un message a été supprimé
           if (isset($_GET['delete_ms'])) {
@@ -243,8 +230,7 @@
             echo '<p>No contact messages found.</p>';
           }
 
-          // Fermeture de la connexion à la base de données
-          mysqli_close($conn);
+
           ?>
         </div>
 
@@ -252,44 +238,259 @@
         <!-- Students -->
         <div id="students" class="content">
           <h1>Students</h1>
-          <p>Content for Students page goes here.</p>
+
+          <!-- Add Student Button -->
+          <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addStudentModal">Add Student</button>
+
+          <?php
+
+          // Vérification si un étudiant a été ajouté ou modifié
+          if (isset($_POST['action_stu'])) {
+            $action = $_POST['action_stu'];
+
+            if ($action === 'add_stu') {
+              // Récupération des données du formulaire d'ajout
+              $studentName = $_POST['student_name'];
+              $studentSpeciality = $_POST['student_speciality'];
+              $studentInstructor = $_POST['student_instructor'];
+              $studentEmail = $_POST['student_email'];
+              $studentPhone = $_POST['student_phone'];
+
+              // Insertion du nouvel étudiant dans la table "etudiants"
+              $insertStudentSql = "INSERT INTO etudiants (nom_etu, prenom_etu, date_naissance_etu, numero_telephone_etu, email_etu)
+                VALUES ('$studentName', '', '', '$studentPhone', '$studentEmail')";
+              if (mysqli_query($conn, $insertStudentSql)) {
+                $studentId = mysqli_insert_id($conn);
+
+                // Insertion des informations supplémentaires dans la table "etudiant_speciality"
+                $insertSpecialitySql = "INSERT INTO etudiant_speciality (id_etudiant, id_instructor, id_course, date_debut, date_fin)
+                  VALUES ($studentId, $studentInstructor, 0, '', '')";
+                if (mysqli_query($conn, $insertSpecialitySql)) {
+                  echo '<div class="alert alert-success" role="alert">Student added successfully.</div>';
+                } else {
+                  echo '<div class="alert alert-danger" role="alert">Error adding student: ' . mysqli_error($conn) . '</div>';
+                }
+              } else {
+                echo '<div class="alert alert-danger" role="alert">Error adding student: ' . mysqli_error($conn) . '</div>';
+              }
+            } elseif ($action === 'update') {
+              // Récupération des données du formulaire de mise à jour
+              $studentId = $_POST['student_id'];
+              $studentName = $_POST['student_name'];
+              $studentSpeciality = $_POST['student_speciality'];
+              $studentInstructor = $_POST['student_instructor'];
+              $studentEmail = $_POST['student_email'];
+              $studentPhone = $_POST['student_phone'];
+
+              // Mise à jour du nom de l'étudiant dans la table "etudiants"
+              $updateStudentSql = "UPDATE etudiants 
+                SET nom_etu = '$studentName', numero_telephone_etu = '$studentPhone', email_etu = '$studentEmail'
+                WHERE id_etudiant = $studentId";
+              if (mysqli_query($conn, $updateStudentSql)) {
+
+                // Mise à jour des informations supplémentaires dans la table "etudiant_speciality"
+                $updateSpecialitySql = "UPDATE etudiant_speciality 
+                  SET id_instructor = $studentInstructor
+                  WHERE id_etudiant = $studentId";
+                if (mysqli_query($conn, $updateSpecialitySql)) {
+                  echo '<div class="alert alert-success" role="alert">Student updated successfully.</div>';
+                } else {
+                  echo '<div class="alert alert-danger" role="alert">Error updating student: ' . mysqli_error($conn) . '</div>';
+                }
+              } else {
+                echo '<div class="alert alert-danger" role="alert">Error updating student: ' . mysqli_error($conn) . '</div>';
+              }
+            }
+          }
+
+          // Vérification si un étudiant a été supprimé
+          if (isset($_GET['delete_stu'])) {
+            $deleteId = $_GET['delete_stu'];
+
+            // Suppression des informations supplémentaires dans la table "etudiant_speciality"
+            $deleteSpecialitySql = "DELETE FROM etudiant_speciality WHERE id_etudiant = $deleteId";
+            if (mysqli_query($conn, $deleteSpecialitySql)) {
+
+              // Suppression de l'étudiant de la table "etudiants"
+              $deleteStudentSql = "DELETE FROM etudiants WHERE id_etudiant = $deleteId";
+              if (mysqli_query($conn, $deleteStudentSql)) {
+                echo '<div class="alert alert-success" role="alert">Student deleted successfully.</div>';
+              } else {
+                echo '<div class="alert alert-danger" role="alert">Error deleting student: ' . mysqli_error($conn) . '</div>';
+              }
+            } else {
+              echo '<div class="alert alert-danger" role="alert">Error deleting student: ' . mysqli_error($conn) . '</div>';
+            }
+          }
+
+          // Récupération des étudiants avec leurs informations supplémentaires
+          $selectSql = "SELECT etudiants.id_etudiant, etudiants.nom_etu, etudiants.prenom_etu, etudiants.date_naissance_etu, etudiants.numero_telephone_etu, etudiants.email_etu, etudiant_speciality.id_instructor, etudiant_speciality.id_course, etudiant_speciality.date_debut, etudiant_speciality.date_fin
+            FROM etudiants
+            INNER JOIN etudiant_speciality ON etudiants.id_etudiant = etudiant_speciality.id_etudiant";
+          $result = mysqli_query($conn, $selectSql);
+
+          if (mysqli_num_rows($result) > 0) {
+            echo '<table class="table">
+              <thead>
+                <tr>
+                  <th>Student ID</th>
+                  <th>Name</th>
+                  <th>Date of Birth</th>
+                  <th>Phone</th>
+                  <th>Email</th>
+                  <th>Instructor</th>
+                  <th>Course</th>
+                  <th>Start Date</th>
+                  <th>End Date</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>';
+
+            while ($row = mysqli_fetch_assoc($result)) {
+              echo '<tr>';
+              echo '<td>' . $row["id_etudiant"] . '</td>';
+              echo '<td>' . $row["nom_etu"] . ' ' . $row["prenom_etu"] . '</td>';
+              echo '<td>' . $row["date_naissance_etu"] . '</td>';
+              echo '<td>' . $row["numero_telephone_etu"] . '</td>';
+              echo '<td>' . $row["email_etu"] . '</td>';
+
+              // Récupération de l'instructeur
+              $instructorId = $row["id_instructor"];
+              $instructorSql = "SELECT instructor_name FROM instructors WHERE instructor_id = $instructorId";
+              $instructorResult = mysqli_query($conn, $instructorSql);
+              $instructorRow = mysqli_fetch_assoc($instructorResult);
+              $instructorName = $instructorRow["instructor_name"];
+
+
+              echo '<td>' . $instructorName . '</td>';
+
+              // Récupération du cours
+              $courseId = $row["id_course"];
+              $courseSql = "SELECT course_name FROM courses WHERE course_id = $courseId";
+              $courseResult = mysqli_query($conn, $courseSql);
+              $courseRow = mysqli_fetch_assoc($courseResult);
+              $courseName = $courseRow["course_name"];
+
+              echo '<td>' . $courseName . '</td>';
+              echo '<td>' . $row["date_debut"] . '</td>';
+              echo '<td>' . $row["date_fin"] . '</td>';
+
+              // Actions
+              echo '<td>
+                <button class="btn btn-sm btn-primary edit-student" data-bs-toggle="modal" data-bs-target="#editStudentModal" data-student-id="' . $row["id_etudiant"] . '">Edit</button>
+                <a href="students.php?delete_stu=' . $row["id_etudiant"] . '" class="btn btn-sm btn-danger" onclick="return confirm(\'Are you sure you want to delete this student?\')">Delete</a>
+              </td>';
+
+              echo '</tr>';
+            }
+
+            echo '</tbody>
+            </table>';
+          } else {
+            echo '<div class="alert alert-info" role="alert">No students found.</div>';
+          }
+          // Récupérer les cours depuis la base de données
+          $coursesSql = "SELECT course_id, course_name FROM courses";
+          $coursesResult = mysqli_query($conn, $coursesSql);
+
+          ?>
+          <!-- Add Student Modal -->
+          <div class="modal fade" id="addStudentModal" tabindex="-1" aria-labelledby="addStudentModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="addStudentModalLabel">Add Student</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <form action="" method="POST">
+                    <input type="hidden" name="action_stu" value="add_stu">
+
+                    <div class="mb-3">
+                      <label for="student_name" class="form-label">Name</label>
+                      <input type="text" class="form-control" id="student_name" name="student_name" required>
+                    </div>
+
+                    <div class="mb-3">
+                      <label for="student_speciality" class="form-label">Speciality</label>
+                      <select class="form-select" id="student_speciality" name="student_speciality" required>
+                        <?php
+                        // Afficher les options de sélection des cours
+                        while ($courseRow = mysqli_fetch_assoc($coursesResult)) {
+                          echo '<option value="' . $courseRow["course_id"] . '">' . $courseRow["course_name"] . '</option>';
+                        }
+                        ?>
+                      </select>
+                    </div>
+
+                    <div class="mb-3">
+                      <label for="student_instructor" class="form-label">Instructor</label>
+                      <select class="form-select" id="student_instructor" name="student_instructor" required>
+                        <?php
+                        // Récupérer les instructeurs depuis la base de données
+                        $instructorSql = "SELECT instructor_id, instructor_name FROM instructors";
+                        $instructorResult = mysqli_query($conn, $instructorSql);
+
+                        while ($instructorRow = mysqli_fetch_assoc($instructorResult)) {
+                          echo '<option value="' . $instructorRow["instructor_id"] . '">' . $instructorRow["instructor_name"] . '</option>';
+                        }
+                        ?>
+                      </select>
+                    </div>
+
+                    <div class="mb-3">
+                      <label for="student_email" class="form-label">Email</label>
+                      <input type="email" class="form-control" id="student_email" name="student_email" required>
+                    </div>
+
+                    <div class="mb-3">
+                      <label for="student_phone" class="form-label">Phone</label>
+                      <input type="text" class="form-control" id="student_phone" name="student_phone" required>
+                    </div>
+
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                      <button type="submit" class="btn btn-primary">Add Student</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
+
 
         <!-- Courses -->
         <div id="courses" class="content">
           <h1>Courses</h1>
-          <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addCourseModal">Add Course</button>
+
+          <!-- Add Course Button -->
+          <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCourseModal">Add Course</button>
+
           <?php
-          // Connexion à la base de données
-          $conn = mysqli_connect("localhost", "root", "", "ams");
-
-          // Vérification de la connexion
-          if (!$conn) {
-            die("Connection failed: " . mysqli_connect_error());
-          }
-
-          // Vérification si un cours a été ajouté ou modifié
+          // Check if a course has been added or updated
           if (isset($_POST['action'])) {
             $action = $_POST['action'];
 
-            if ($action === 'add') {
-              // Récupération des données du formulaire d'ajout
+            if ($action === 'add_crs') {
+              // Get data from the add form
               $courseName = $_POST['course_name'];
               $courseDescription = $_POST['course_description'];
               $instructorId = $_POST['instructor_id'];
 
-              // Vérification de l'image
+              // Check if an image has been uploaded
               if (isset($_FILES['course_image']) && $_FILES['course_image']['error'] === UPLOAD_ERR_OK) {
-                $targetDirectory = "upload/"; // Répertoire de destination des images
+                $targetDirectory = "upload/"; // Destination directory for images
                 $targetFile = $targetDirectory . basename($_FILES['course_image']['name']);
                 $imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
 
-                // Vérification du type de fichier
+                // Check the file type
                 $allowedExtensions = array("jpg", "jpeg", "png");
                 if (in_array($imageFileType, $allowedExtensions)) {
-                  // Déplacement du fichier vers le répertoire de destination
+                  // Move the file to the destination directory
                   if (move_uploaded_file($_FILES['course_image']['tmp_name'], $targetFile)) {
-                    // Insertion du nouveau cours dans la base de données avec le chemin de l'image
+                    // Insert the new course into the database with the image path
                     $insertSql = "INSERT INTO courses (course_name, course_description, course_image, instructor_id)
                           VALUES ('$courseName', '$courseDescription', '$targetFile', $instructorId)";
                     if (mysqli_query($conn, $insertSql)) {
@@ -307,23 +508,23 @@
                 echo '<div class="alert alert-danger" role="alert">Error uploading image.</div>';
               }
             } elseif ($action === 'update') {
-              // Récupération des données du formulaire de mise à jour
+              // Get data from the update form
               $courseId = $_POST['course_id'];
               $courseName = $_POST['course_name'];
               $courseDescription = $_POST['course_description'];
               $instructorId = $_POST['instructor_id'];
 
-              // Vérification si une nouvelle image a été sélectionnée
+              // Check if a new image has been selected
               $updateImage = false;
               if (isset($_FILES['course_image']) && $_FILES['course_image']['error'] === UPLOAD_ERR_OK) {
-                $targetDirectory = "upload/"; // Répertoire de destination des images
+                $targetDirectory = "upload/"; // Destination directory for images
                 $targetFile = $targetDirectory . basename($_FILES['course_image']['name']);
                 $imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
 
-                // Vérification du type de fichier
+                // Check the file type
                 $allowedExtensions = array("jpg", "jpeg", "png");
                 if (in_array($imageFileType, $allowedExtensions)) {
-                  // Déplacement du fichier vers le répertoire de destination
+                  // Move the file to the destination directory
                   if (move_uploaded_file($_FILES['course_image']['tmp_name'], $targetFile)) {
                     $updateImage = true;
                   } else {
@@ -334,7 +535,7 @@
                 }
               }
 
-              // Mise à jour du cours dans la base de données
+              // Update the course in the database
               if ($updateImage) {
                 $updateSql = "UPDATE courses 
                       SET course_name = '$courseName', course_description = '$courseDescription', course_image = '$targetFile', instructor_id = $instructorId
@@ -353,20 +554,20 @@
             }
           }
 
-          // Vérification si un cours a été supprimé
+          // Check if a course has been deleted
           if (isset($_GET['delete'])) {
             $deleteId = $_GET['delete'];
 
-            // Suppression du cours de la base de données
-            $deleteSql_c = "DELETE FROM courses WHERE course_id = $deleteId";
-            if (mysqli_query($conn, $deleteSql_c)) {
+            // Delete the course from the database
+            $deleteSql = "DELETE FROM courses WHERE course_id = $deleteId";
+            if (mysqli_query($conn, $deleteSql)) {
               echo '<div class="alert alert-success" role="alert">Course deleted successfully.</div>';
             } else {
               echo '<div class="alert alert-danger" role="alert">Error deleting course: ' . mysqli_error($conn) . '</div>';
             }
           }
 
-          // Récupération des cours avec les informations sur les instructeurs associés
+          // Retrieve courses with associated instructor information
           $selectSql = "SELECT courses.course_id, courses.course_name, courses.course_description, courses.course_image, instructors.instructor_name
                 FROM courses
                 LEFT JOIN instructors ON courses.instructor_id = instructors.instructor_id";
@@ -374,17 +575,17 @@
 
           if (mysqli_num_rows($result) > 0) {
             echo '<table class="table">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Course Name</th>
-              <th>Description</th>
-              <th>Image</th>
-              <th>Instructor</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>';
+            <thead>
+              <tr>
+                <th>Course ID</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Image</th>
+                <th>Instructor</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>';
 
             while ($row = mysqli_fetch_assoc($result)) {
               echo '<tr>';
@@ -394,73 +595,127 @@
               echo '<td><img src="' . $row["course_image"] . '" alt="Course Image" height="50"></td>';
               echo '<td>' . $row["instructor_name"] . '</td>';
               echo '<td>
-              <a href="#" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editCourseModal-' . $row["course_id"] . '">Edit</a>
-              <a href="?delete=' . $row["course_id"] . '" class="btn btn-danger btn-sm" onclick="return confirm(\'Are you sure you want to delete this course?\')">Delete</a>
+              <button class="btn btn-sm btn-primary edit-course" data-bs-toggle="modal" data-bs-target="#editCourseModal" data-course-id="' . $row["course_id"] . '">Edit</button>
+              <a href="?delete=' . $row["course_id"] . '" class="btn btn-sm btn-danger" onclick="return confirm(\'Are you sure you want to delete this course?\')">Delete</a>
             </td>';
               echo '</tr>';
-
-              // Modal pour la modification du cours
-              echo '<div class="modal fade" id="editCourseModal-' . $row["course_id"] . '" tabindex="-1" aria-labelledby="editCourseModalLabel-' . $row["course_id"] . '" aria-hidden="true">
-              <div class="modal-dialog">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="editCourseModalLabel-' . $row["course_id"] . '">Edit Course</h5>
-                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-                  </div>
-                  <div class="modal-body">
-                    <form action="" method="post" enctype="multipart/form-data">
-                      <input type="hidden" name="action" value="update">
-                      <input type="hidden" name="course_id" value="' . $row["course_id"] . '">
-                      <div class="form-group">
-                        <label for="editCourseName">Course Name:</label>
-                        <input type="text" class="form-control" id="editCourseName" name="course_name" value="' . $row["course_name"] . '" required>
-                      </div>
-                      <div class="form-group">
-                        <label for="editCourseDescription">Course Description:</label>
-                        <textarea class="form-control" id="editCourseDescription" name="course_description" rows="3" required>' . $row["course_description"] . '</textarea>
-                      </div>
-                      <div class="form-group">
-                        <label for="editInstructorId">Instructor:</label>
-                        <select class="form-control" id="editInstructorId" name="instructor_id" required>
-                          <option value="">Select an Instructor</option>';
-
-              // Récupération des instructeurs
-              $instructorsSql = "SELECT * FROM instructors";
-              $instructorsResult = mysqli_query($conn, $instructorsSql);
-
-              while ($instructorRow = mysqli_fetch_assoc($instructorsResult)) {
-                $selected = ($instructorRow["instructor_id"] == $row["instructor_id"]) ? 'selected' : '';
-                echo '<option value="' . $instructorRow["instructor_id"] . '" ' . $selected . '>' . $instructorRow["instructor_name"] . '</option>';
-              }
-
-              echo '            </select>
-                      </div>
-                      <div class="form-group">
-                        <label for="editCourseImage">Course Image:</label>
-                        <input type="file" class="form-control-file" id="editCourseImage" name="course_image">
-                      </div>
-                      <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Save Changes</button>
-                      </div>
-                    </form>
-                  </div>
-                </div>
-              </div>
-            </div>';
             }
 
             echo '</tbody></table>';
           } else {
-            echo '<p>No courses found.</p>';
+            echo '<div class="alert alert-info" role="alert">No courses found.</div>';
           }
-
-          // Fermeture de la connexion à la base de données
-          mysqli_close($conn);
           ?>
+
         </div>
+
+        <!-- Add Course Modal -->
+        <div class="modal fade" id="addCourseModal" tabindex="-1" aria-labelledby="addCourseModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="addCourseModalLabel">Add Course</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <form action="" method="POST" enctype="multipart/form-data">
+                  <input type="hidden" name="action" value="add_crs">
+
+                  <div class="mb-3">
+                    <label for="course_name" class="form-label">Course Name</label>
+                    <input type="text" class="form-control" id="course_name" name="course_name" required>
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="course_description" class="form-label">Course Description</label>
+                    <textarea class="form-control" id="course_description" name="course_description" required></textarea>
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="course_image" class="form-label">Course Image</label>
+                    <input type="file" class="form-control" id="course_image" name="course_image" accept="image/jpeg,image/png" required>
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="instructor_id" class="form-label">Instructor</label>
+                    <select class="form-select" id="instructor_id" name="instructor_id" required>
+                      <?php
+                      // Retrieve the instructors
+                      $instructorSql = "SELECT instructor_id, instructor_name FROM instructors";
+                      $instructorResult = mysqli_query($conn, $instructorSql);
+
+                      while ($instructorRow = mysqli_fetch_assoc($instructorResult)) {
+                        echo '<option value="' . $instructorRow["instructor_id"] . '">' . $instructorRow["instructor_name"] . '</option>';
+                      }
+                      ?>
+                    </select>
+                  </div>
+
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Add Course</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Edit Course Modal -->
+        <div class="modal fade" id="editCourseModal" tabindex="-1" aria-labelledby="editCourseModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="editCourseModalLabel">Edit Course</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <form action="" method="POST" enctype="multipart/form-data">
+                  <input type="hidden" name="action" value="update">
+
+                  <input type="hidden" id="edit_course_id" name="course_id">
+
+                  <div class="mb-3">
+                    <label for="edit_course_name" class="form-label">Course Name</label>
+                    <input type="text" class="form-control" id="edit_course_name" name="course_name" required>
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="edit_course_description" class="form-label">Course Description</label>
+                    <textarea class="form-control" id="edit_course_description" name="course_description" required></textarea>
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="edit_course_image" class="form-label">Course Image</label>
+                    <input type="file" class="form-control" id="edit_course_image" name="course_image" accept="image/jpeg,image/png">
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="edit_instructor_id" class="form-label">Instructor</label>
+                    <select class="form-select" id="edit_instructor_id" name="instructor_id" required>
+                      <?php
+                      // Retrieve the instructors
+                      $instructorSql = "SELECT instructor_id, instructor_name FROM instructors";
+                      $instructorResult = mysqli_query($conn, $instructorSql);
+
+                      while ($instructorRow = mysqli_fetch_assoc($instructorResult)) {
+                        echo '<option value="' . $instructorRow["instructor_id"] . '">' . $instructorRow["instructor_name"] . '</option>';
+                      }
+                      ?>
+                    </select>
+                  </div>
+
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Update Course</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
 
         <!-- Instructors -->
         <div id="instructors" class="content">
@@ -491,7 +746,7 @@
 
               // Insertion du nouvel instructeur dans la base de données
               $insertSql = "INSERT INTO instructors (instructor_name, instructor_specialty, instructor_email, instructor_phone)
-      VALUES ('$instructorName', '$instructorSpecialty', '$instructorEmail', '$instructorPhone')";
+              VALUES ('$instructorName', '$instructorSpecialty', '$instructorEmail', '$instructorPhone')";
               if (mysqli_query($conn, $insertSql)) {
                 echo '<div class="alert alert-success" role="alert">Instructor added successfully.</div>';
               } else {
@@ -507,9 +762,9 @@
 
               // Mise à jour de l'instructeur dans la base de données
               $updateSql_ins = "UPDATE instructors 
-      SET instructor_name = '$instructorName', instructor_specialty = '$instructorSpecialty', 
-      instructor_email = '$instructorEmail', instructor_phone = '$instructorPhone'
-      WHERE instructor_id = $instructorId";
+                SET instructor_name = '$instructorName', instructor_specialty = '$instructorSpecialty', 
+              instructor_email = '$instructorEmail', instructor_phone = '$instructorPhone'
+              WHERE instructor_id = $instructorId";
               if (mysqli_query($conn, $updateSql_ins)) {
                 echo '<div class="alert alert-success" role="alert">Instructor updated successfully.</div>';
               } else {
@@ -537,17 +792,17 @@
 
           if (mysqli_num_rows($result) > 0) {
             echo '<table class="table">
-    <thead>
-      <tr>
-        <th>Instructor ID</th>
-        <th>Name</th>
-        <th>Specialty</th>
-        <th>Email</th>
-        <th>Phone</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>';
+                    <thead>
+                     <tr>
+                      <th>Instructor ID</th>
+                      <th>Name</th>
+                      <th>Specialty</th>
+                      <th>Email</th>
+                      <th>Phone</th>
+                      <th>Actions</th>
+                     </tr>
+                    </thead>
+                  <tbody>';
 
             while ($row = mysqli_fetch_assoc($result)) {
               echo '<tr>';
@@ -557,22 +812,22 @@
               echo '<td>' . $row["instructor_email"] . '</td>';
               echo '<td>' . $row["instructor_phone"] . '</td>';
               echo '<td>
-          <a href="#" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editInstructorModal-' . $row["instructor_id"] . '">Edit</a>
-          <a href="?delete_ins=' . $row["instructor_id"] . '" class="btn btn-danger btn-sm" onclick="return confirm(\'Are you sure you want to delete this instructor?\')">Delete</a>
-        </td>';
+                <a href="#" class="btn btn-primary btn-sm" data-bs-toggle="modal"       data-bs-target="#editInstructorModal-' . $row["instructor_id"] . '">Edit</a>
+                <a href="?delete_ins=' . $row["instructor_id"] . '" class="btn btn-danger btn-sm"       onclick="return confirm(\'Are you sure you want to delete this instructor?\')      ">Delete</a>
+              </td>';
               echo '</tr>';
 
               // Modal pour la modification de l'instructeur
               echo '<div class="modal fade" id="editInstructorModal-' . $row["instructor_id"] . '" tabindex="-1" aria-labelledby="editInstructorModalLabel-' . $row["instructor_id"] . '" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
+              <div class="modal-dialog">
+             <div class="modal-content">
+              <div class="modal-header">
             <h5 class="modal-title" id="editInstructorModalLabel-' . $row["instructor_id"] . '">Edit Instructor</h5>
             <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
-          </div>
-          <div class="modal-body">
+              </div>
+              <div class="modal-body">
             <form action="" method="post">
               <input type="hidden" name="action" value="update_ins">
               <input type="hidden" name="instructor_id" value="' . $row["instructor_id"] . '">
@@ -593,11 +848,11 @@
                 <input type="text" class="form-control" id="editInstructorPhone" name="instructor_phone" value="' . $row["instructor_phone"] . '" required>
               </div>
               <button type="submit" class="btn btn-primary">Save Changes</button>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>';
+                  </form>
+                    </div>
+                  </div>
+                </div>
+              </div>';
             }
 
             echo '</tbody></table>';
@@ -605,10 +860,9 @@
             echo '<p>No instructors found.</p>';
           }
 
-          // Fermeture de la connexion à la base de données
-          mysqli_close($conn);
           ?>
         </div>
+
 
         <!-- Add Instructor Modal -->
         <div class="modal fade" id="addInstructorModal" tabindex="-1" aria-labelledby="addInstructorModalLabel" aria-hidden="true">
@@ -645,6 +899,8 @@
             </div>
           </div>
         </div>
+
+
 
         <!-- Logout Modal -->
         <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutModalLabel" aria-hidden="true">
@@ -687,3 +943,7 @@
 </body>
 
 </html>
+<?php
+// Fermeture de la connexion à la base de données
+mysqli_close($conn);
+?>
