@@ -41,23 +41,16 @@
   </header>
 
 
-  <section class="jumbotron text-center">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-12">
-          <div class="position-relative">
-            <img src="img/352499042_3260409140926278_8767796183506052124_n.jpg" class="img-fluid" alt="Image de bienvenue" style="object-fit: cover; filter: brightness(70%); width: 100vw; height: 100vh;">
-            <!-- <div class="container"> -->
-            <div class="position-absolute top-50 start-50 translate-middle">
-              <h1 class="text-white">Bienvenue à l'Académie Maram School</h1>
-              <p class="lead text-white">Découvrez notre large gamme de cours et nos instructeurs experts.</p>
-              <a href="#about" class="btn btn-primary">En savoir plus</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+  <section class="jumbotron text-center" style="position: relative; padding: 0;">
+  <img src="img/352499042_3260409140926278_8767796183506052124_n.jpg" class="img-fluid" alt="Image de bienvenue" style="object-fit: cover; width: 100%; height: 100vh;">
+  <div class="container position-absolute top-50 start-50 translate-middle" style="transform: translate(-50%, -50%);">
+    <h1 class="text-white">Bienvenue à l'Académie Maram School</h1>
+    <p class="lead text-white">Découvrez notre large gamme de cours et nos instructeurs experts.</p>
+    <a href="#about" class="btn btn-primary">En savoir plus</a>
+  </div>
+</section>
+  
+
 
 
   <section id="about" class="bg-light pt-5 pb-5 mb-5">
