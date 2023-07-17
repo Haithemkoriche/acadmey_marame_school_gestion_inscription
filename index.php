@@ -12,50 +12,72 @@
 </head>
 
 <body>
-  <header>
-    <!-- Navbar Bootstrap -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <div class="container">
-        <a class="navbar-brand" href="#"><img src="img/logo.png" alt="" srcset="" width="100px" height="82px"></a>
-        <!-- ... -->
+<header>
+  <!-- Navbar Bootstrap -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+      <a class="navbar-brand" href="#"><img src="img/logo.png" alt="" srcset="" width="100px" height="82px"></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="#about">About</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#courses">Courses</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#team">Instructors</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#contact">Contact</a>
+          </li>
+        </ul>
       </div>
-    </nav>
-  </header>
+    </div>
+  </nav>
+</header>
+
 
   <section class="jumbotron text-center">
-    <div class="container">
     <div class="row">
       <div class="col-md-12">
         <div class="position-relative">
           <img src="img/352499042_3260409140926278_8767796183506052124_n.jpg" class="img-fluid" alt="Welcome Image" style="object-fit: cover; filter: brightness(70%); width: 100vw; height: 100vh;">
+          <!-- <div class="container"> -->
           <div class="position-absolute top-50 start-50 translate-middle">
               <h1 class="text-white">Welcome to Academy Maram School</h1>
               <p class="lead text-white">Discover our wide range of courses and expert instructors.</p>
               <a href="#about" class="btn btn-primary">Learn More</a>
             </div>
-        </div>
+        <!-- </div> -->
       </div>
     </div>
   </div>
 </section>
 
 
-  <section id="about">
-    <div class="container mt-5 mb-5">
-      <div class="row">
-        <div class="col-md-6">
-          <h2 class="text-center">A Propos</h2>
+<section id="about">
+  <div class="container mt-5 mb-5">
+    <div class="row">
+      <div class="col-md-6 d-flex align-items-center">
+        <div class="text-center">
+          <h2>A Propos</h2>
           <p>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus
             convallis suscipit tellus id aliquet.
           </p>
         </div>
-        <div class="col-md-6">
-          <img src="img/352499042_3260409140926278_8767796183506052124_n.jpg" alt="About Image" class="img-fluid" />
-        </div>
+      </div>
+      <div class="col-md-6 d-flex align-items-center">
+        <img src="img/352499042_3260409140926278_8767796183506052124_n.jpg" alt="About Image" class="img-fluid" style="max-width: 100%; max-height: auto;">
       </div>
     </div>
-  </section>
+  </div>
+</section>
+
 
   <section id="courses" class="bg-light pt-5 pb-5 mb-4">
     <div class="container">
