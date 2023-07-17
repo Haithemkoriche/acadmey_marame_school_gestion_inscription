@@ -6,6 +6,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="asstes/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="asstes/fonts/css/all.min.css">
+
   <title>Academy Maram School</title>
 </head>
 
@@ -21,26 +23,27 @@
   </header>
 
   <section class="jumbotron text-center">
-    <!-- <div class="container"> -->
+    <div class="container">
     <div class="row">
       <div class="col-md-12">
         <div class="position-relative">
-          <img src="img/352499042_3260409140926278_8767796183506052124_n.jpg" class="img-fluid" alt="Welcome Image" style="object-fit: cover; height: 100vh; width: 100%; filter: brightness(70%);">
+          <img src="img/352499042_3260409140926278_8767796183506052124_n.jpg" class="img-fluid" alt="Welcome Image" style="object-fit: cover; filter: brightness(70%); width: 100vw; height: 100vh;">
           <div class="position-absolute top-50 start-50 translate-middle">
-            <h1 class="text-white">Welcome to Academy Maram School</h1>
-            <p class="lead text-white">Discover our wide range of courses and expert instructors.</p>
-            <a href="#about" class="btn btn-primary">Learn More</a>
-            <!-- </div> -->
-          </div>
+              <h1 class="text-white">Welcome to Academy Maram School</h1>
+              <p class="lead text-white">Discover our wide range of courses and expert instructors.</p>
+              <a href="#about" class="btn btn-primary">Learn More</a>
+            </div>
         </div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
+
 
   <section id="about">
     <div class="container mt-5 mb-5">
       <div class="row">
-        <div class="col-md-6 d-lg-flex flex-lg-column justify-content-lg-center">
+        <div class="col-md-6">
           <h2 class="text-center">A Propos</h2>
           <p>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus
@@ -48,7 +51,7 @@
           </p>
         </div>
         <div class="col-md-6">
-          <img src="img/352499042_3260409140926278_8767796183506052124_n.jpg" alt="About Image" class="img-fluid" style="max-height: 500px;" />
+          <img src="img/352499042_3260409140926278_8767796183506052124_n.jpg" alt="About Image" class="img-fluid" />
         </div>
       </div>
     </div>
@@ -70,8 +73,8 @@
           $courseImage = $courseRow['course_image'];
         ?>
           <div class="col-md-4">
-            <div class="card">
-              <img src="admin/<?php echo $courseImage; ?>" alt="<?php echo $courseName; ?>" class="card-img-top" style="height: 200px; object-fit: cover;" />
+            <div class="card mb-4">
+              <img src="admin/<?php echo $courseImage; ?>" alt="<?php echo $courseName; ?>" class="card-img-top" style="object-fit: cover; height: 200px;">
               <div class="card-body">
                 <h5 class="card-title"><?php echo $courseName; ?></h5>
                 <p class="card-text"><?php echo $courseDescription; ?></p>
@@ -93,12 +96,12 @@
                     <input type="hidden" name="course_id" value="<?php echo $courseId; ?>">
 
                     <div class="mb-3">
-                      <label for="student_name" class="form-label">Your Name</label>
+                      <label class="form-label" for="student_name">Your Name</label>
                       <input type="text" class="form-control" id="student_name" name="student_name" required>
                     </div>
 
                     <div class="mb-3">
-                      <label for="student_email" class="form-label">Your Email</label>
+                      <label class="form-label" for="student_email">Your Email</label>
                       <input type="email" class="form-control" id="student_email" name="student_email" required>
                     </div>
 
@@ -136,7 +139,7 @@
         ?>
           <div class="col-md-4">
             <div class="card mb-4">
-              <img src="admin/<?php echo $instructorImage; ?>" alt="<?php echo $instructorName; ?>" class="card-img-top" style="height: 300px; object-fit: cover;" />
+              <img src="admin/<?php echo $instructorImage; ?>" alt="<?php echo $instructorName; ?>" class="card-img-top" style="object-fit: cover; height: 300px;" />
               <div class="card-body">
                 <h5 class="card-title"><?php echo $instructorName; ?></h5>
                 <p class="card-text"><?php echo $instructorDescription; ?></p>
@@ -189,74 +192,90 @@
   ?>
 
 
-  <section id="contact">
-    <div class="container">
-      <h2 class="text-center">Contact Us</h2>
+<section id="contact">
+  <div class="container mt-5 mb-5">
+    <h2 class="text-center">Contact Us</h2>
 
-      <?php if (!empty($successMessage)) { ?>
-        <div class="alert alert-success" role="alert">
-          <?php echo $successMessage; ?>
-        </div>
-      <?php } ?>
-<div class="container">
-      <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-        <div class="form-group">
-          <label for="name">Name:</label>
-          <input type="text" class="form-control" id="name" name="name" value="<?php echo $name; ?>">
-        </div>
-        <div class="form-group">
-          <label for="email">Email:</label>
-          <input type="email" class="form-control" id="email" name="email" value="<?php echo $email; ?>">
-        </div>
-        <div class="form-group">
-          <label for="message">Message:</label>
-          <textarea class="form-control" id="message" name="message"><?php echo $message; ?></textarea>
-        </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
-      </form>
-    </div>
-    </div>
-    </div>
-    </div>
+    <?php if (!empty($successMessage)) { ?>
+      <div class="alert alert-success" role="alert">
+        <?php echo $successMessage; ?>
+      </div>
+    <?php } ?>
 
-    <!-- Success Modal -->
-    <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="successModalLabel">Message Sent</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+          <div class="form-group">
+            <label class="form-label" for="name">Name:</label>
+            <input type="text" class="form-control" id="name" name="name" value="<?php echo $name; ?>">
           </div>
-          <div class="modal-body">
-            <p>Your message has been sent successfully. We will get back to you soon.</p>
+          <div class="form-group">
+            <label class="form-label" for="email">Email:</label>
+            <input type="email" class="form-control" id="email" name="email" value="<?php echo $email; ?>">
           </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <footer class="footer bg-dark text-white pt-5 mt-4 pb-5">
-  <div class="container">
-    <div class="row">
-      <div class="col-md-4">
-        <h4>About Academy Maram School</h4>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus convallis suscipit tellus id aliquet.</p>
-      </div>
-      <div class="col-md-4">
-        <h4>Contact Information</h4>
-        <p>123 Main Street, City, Country</p>
-        <p>Phone: +1 234 567890</p>
-        <p>Email: info@academymaramschool.com</p>
-      </div>
-      <div class="col-md-4">
-        <h4>Location</h4>
-        <div id="map"></div>
+          <div class="form-group">
+            <label class="form-label" for="message">Message:</label>
+            <textarea class="form-control" id="message" name="message"><?php echo $message; ?></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary mt-3">Submit</button>
+        </form>
       </div>
     </div>
   </div>
-</footer>
 
-  <!-- ... -->
+  <!-- Success Modal -->
+  <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="successModalLabel">Message Sent</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>Your message has been sent successfully. We will get back to you soon.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+  <footer class="footer bg-dark text-white pt-5 mt-4 pb-5">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4">
+          <h4>About Academy Maram School</h4>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus convallis suscipit tellus id aliquet.</p>
+        </div>
+        <div class="col-md-4">
+          <h4>Contact Information</h4>
+          <p>123 Main Street, City, Country</p>
+          <p>Phone: +1 234 567890</p>
+          <p>Email: info@academymaramschool.com</p>
+          <h4>Follow Us</h4>
+          <ul class="list-inline social-icons">
+            <li class="list-inline-item">
+              <a href="#" target="_blank"><i class="fab fa-facebook"></i></a>
+            </li>
+            <li class="list-inline-item">
+              <a href="#" target="_blank"><i class="fab fa-twitter"></i></a>
+            </li>
+            <li class="list-inline-item">
+              <a href="#" target="_blank"><i class="fab fa-instagram"></i></a>
+            </li>
+            <!-- Add more social icons here -->
+          </ul>
+
+        </div>
+        <div class="col-md-4">
+          <h4>Location</h4>
+          <div class="map-responsive">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3196.4675560994906!2d2.9644917152887675!3d36.75934947995714!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x128fb103f8943f9d%3A0x97e9de1c24190320!2sAcademy%20Maram%20School!5e0!3m2!1sen!2sdz!4v1689560554708!5m2!1sen!2sdz" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
 
 
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
