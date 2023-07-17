@@ -1,6 +1,6 @@
 <?php include "config/bdd.php"; ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 
 <head>
   <meta charset="UTF-8" />
@@ -23,13 +23,13 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
           <li class="nav-item me-4">
-            <a class="nav-link" href="#about">About</a>
+            <a class="nav-link" href="#about">À propos</a>
           </li>
           <li class="nav-item me-4">
-            <a class="nav-link" href="#courses">Courses</a>
+            <a class="nav-link" href="#courses">Cours</a>
           </li>
           <li class="nav-item me-4">
-            <a class="nav-link" href="#team">Instructors</a>
+            <a class="nav-link" href="#team">Instructeurs</a>
           </li>
           <li class="nav-item me-4">
             <a class="nav-link" href="#contact">Contact</a>
@@ -45,12 +45,12 @@
     <div class="row">
       <div class="col-md-12">
         <div class="position-relative">
-          <img src="img/352499042_3260409140926278_8767796183506052124_n.jpg" class="img-fluid" alt="Welcome Image" style="object-fit: cover; filter: brightness(70%); width: 100vw; height: 100vh;">
+          <img src="img/352499042_3260409140926278_8767796183506052124_n.jpg" class="img-fluid" alt="Image de bienvenue" style="object-fit: cover; filter: brightness(70%); width: 100vw; height: 100vh;">
           <!-- <div class="container"> -->
           <div class="position-absolute top-50 start-50 translate-middle">
-              <h1 class="text-white">Welcome to Academy Maram School</h1>
-              <p class="lead text-white">Discover our wide range of courses and expert instructors.</p>
-              <a href="#about" class="btn btn-primary">Learn More</a>
+              <h1 class="text-white">Bienvenue à l'Académie Maram School</h1>
+              <p class="lead text-white">Découvrez notre large gamme de cours et nos instructeurs experts.</p>
+              <a href="#about" class="btn btn-primary">En savoir plus</a>
             </div>
         <!-- </div> -->
       </div>
@@ -64,7 +64,7 @@
     <div class="row">
       <div class="col-md-6 d-flex align-items-center">
         <div class="text-center">
-          <h2>A Propos</h2>
+          <h2>À Propos</h2>
           <p>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus
             convallis suscipit tellus id aliquet.
@@ -72,7 +72,7 @@
         </div>
       </div>
       <div class="col-md-6 d-flex align-items-center">
-        <img src="img/352499042_3260409140926278_8767796183506052124_n.jpg" alt="About Image" class="img-fluid" style="max-width: 100%; max-height: auto;">
+        <img src="img/352499042_3260409140926278_8767796183506052124_n.jpg" alt="Image à propos" class="img-fluid" style="max-width: 100%; max-height: auto;">
       </div>
     </div>
   </div>
@@ -81,7 +81,7 @@
 
   <section id="courses" class="bg-light pt-5 pb-5 mb-4">
     <div class="container">
-      <h2 class="text-center pb-3">Our Courses</h2>
+      <h2 class="text-center pb-3">Nos Cours</h2>
       <div class="row">
         <?php
         // Récupérer les cours depuis la base de données
@@ -100,17 +100,17 @@
               <div class="card-body">
                 <h5 class="card-title"><?php echo $courseName; ?></h5>
                 <p class="card-text"><?php echo $courseDescription; ?></p>
-                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#registrationModal<?php echo $courseId; ?>">Register</button>
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#registrationModal<?php echo $courseId; ?>">S'inscrire</button>
               </div>
             </div>
           </div>
 
-          <!-- Registration Modal -->
+          <!-- Modal d'inscription -->
           <div class="modal fade" id="registrationModal<?php echo $courseId; ?>" tabindex="-1" aria-labelledby="registrationModalLabel" aria-hidden="true">
             <div class="modal-dialog">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h5 class="modal-title" id="registrationModalLabel">Course Registration</h5>
+                  <h5 class="modal-title" id="registrationModalLabel">Inscription au cours</h5>
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -118,20 +118,20 @@
                     <input type="hidden" name="course_id" value="<?php echo $courseId; ?>">
 
                     <div class="mb-3">
-                      <label class="form-label" for="student_name">Your Name</label>
+                      <label class="form-label" for="student_name">Votre nom</label>
                       <input type="text" class="form-control" id="student_name" name="student_name" required>
                     </div>
 
                     <div class="mb-3">
-                      <label class="form-label" for="student_email">Your Email</label>
+                      <label class="form-label" for="student_email">Votre e-mail</label>
                       <input type="email" class="form-control" id="student_email" name="student_email" required>
                     </div>
 
-                    <!-- Add more registration fields here -->
+                    <!-- Ajoutez plus de champs d'inscription ici -->
 
                     <div class="modal-footer">
-                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                      <button type="submit" class="btn btn-primary">Register</button>
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                      <button type="submit" class="btn btn-primary">S'inscrire</button>
                     </div>
                   </form>
                 </div>
@@ -147,7 +147,7 @@
 
   <section id="team" class="mb-5 mt-5">
     <div class="container">
-      <h2 class="text-center pb-4">Our Instructors</h2>
+      <h2 class="text-center pb-4">Nos Instructeurs</h2>
       <div class="row">
         <?php
         // Récupérer les instructeurs depuis la base de données
@@ -202,9 +202,9 @@
       // Insertion du message dans la table "contact_messages"
       $insertSql = "INSERT INTO contact_messages (name_contact, email_contact, message_contact) VALUES ('$name', '$email', '$message')";
       if (mysqli_query($conn, $insertSql)) {
-        $successMessage = "Message sent successfully!";
+        $successMessage = "Message envoyé avec succès !";
       } else {
-        $errorMessage = "Error: " . $insertSql . "<br>" . mysqli_error($conn);
+        $errorMessage = "Erreur : " . $insertSql . "<br>" . mysqli_error($conn);
       }
     }
   }
@@ -216,7 +216,7 @@
 
 <section id="contact">
   <div class="container mt-5 mb-5">
-    <h2 class="text-center">Contact Us</h2>
+    <h2 class="text-center">Contactez-nous</h2>
 
     <?php if (!empty($successMessage)) { ?>
       <div class="alert alert-success" role="alert">
@@ -228,33 +228,33 @@
       <div class="col-md-6">
         <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
           <div class="form-group">
-            <label class="form-label" for="name">Name:</label>
+            <label class="form-label" for="name">Nom :</label>
             <input type="text" class="form-control" id="name" name="name" value="<?php echo $name; ?>">
           </div>
           <div class="form-group">
-            <label class="form-label" for="email">Email:</label>
+            <label class="form-label" for="email">E-mail :</label>
             <input type="email" class="form-control" id="email" name="email" value="<?php echo $email; ?>">
           </div>
           <div class="form-group">
-            <label class="form-label" for="message">Message:</label>
+            <label class="form-label" for="message">Message :</label>
             <textarea class="form-control" id="message" name="message"><?php echo $message; ?></textarea>
           </div>
-          <button type="submit" class="btn btn-primary mt-3">Submit</button>
+          <button type="submit" class="btn btn-primary mt-3">Envoyer</button>
         </form>
       </div>
     </div>
   </div>
 
-  <!-- Success Modal -->
+  <!-- Modal de succès -->
   <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="successModalLabel">Message Sent</h5>
+          <h5 class="modal-title" id="successModalLabel">Message envoyé</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <p>Your message has been sent successfully. We will get back to you soon.</p>
+          <p>Votre message a été envoyé avec succès. Nous vous répondrons bientôt.</p>
         </div>
       </div>
     </div>
@@ -266,15 +266,15 @@
     <div class="container">
       <div class="row">
         <div class="col-md-4">
-          <h4>About Academy Maram School</h4>
+          <h4>À propos de l'Académie Maram School</h4>
           <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus convallis suscipit tellus id aliquet.</p>
         </div>
         <div class="col-md-4">
-          <h4>Contact Information</h4>
-          <p>123 Main Street, City, Country</p>
-          <p>Phone: +1 234 567890</p>
-          <p>Email: info@academymaramschool.com</p>
-          <h4>Follow Us</h4>
+          <h4>Coordonnées</h4>
+          <p>123 Rue Principale, Ville, Pays</p>
+          <p>Téléphone : +1 234 567890</p>
+          <p>E-mail : info@academymaramschool.com</p>
+          <h4>Suivez-nous</h4>
           <ul class="list-inline social-icons">
             <li class="list-inline-item">
               <a href="#" target="_blank"><i class="fab fa-facebook"></i></a>
@@ -285,12 +285,12 @@
             <li class="list-inline-item">
               <a href="#" target="_blank"><i class="fab fa-instagram"></i></a>
             </li>
-            <!-- Add more social icons here -->
+            <!-- Ajoutez plus d'icônes de réseaux sociaux ici -->
           </ul>
 
         </div>
         <div class="col-md-4">
-          <h4>Location</h4>
+          <h4>Emplacement</h4>
           <div class="map-responsive">
             <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3196.4675560994906!2d2.9644917152887675!3d36.75934947995714!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x128fb103f8943f9d%3A0x97e9de1c24190320!2sAcademy%20Maram%20School!5e0!3m2!1sen!2sdz!4v1689560554708!5m2!1sen!2sdz" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
           </div>
