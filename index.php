@@ -60,7 +60,7 @@
   </section>
 
 
-  <section id="about" class="mt-5 mb-5">
+  <section id="about" class="bg-light pt-5 pb-5 mb-5">
     <div class="container ">
       <h2 style="text-align:center">À propos</h2>
       <div class="row pt-5 pb-5">
@@ -78,7 +78,7 @@
   </section>
 
 
-  <section id="courses" class="bg-light pt-5 pb-5">
+  <section id="courses" class="pt-5 pb-5">
     <div class="container">
       <h2 class="text-center pb-3">Nos Cours</h2>
       <div class="row">
@@ -234,7 +234,7 @@
   ?>
 
 
-  <section id="contact">
+  <section id="contact" style="height: 80vh;">
     <div class="container mt-5 mb-5">
       <h2 class="text-center">Contactez-nous</h2>
 
@@ -244,18 +244,18 @@
         </div>
       <?php } ?>
 
-      <div class="row justify-content-center">
+      <div class="row justify-content-center mt-5 mb-5">
         <div class="col-md-6">
           <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-            <div class="form-group">
+            <div class="form-group mt-2">
               <label class="form-label" for="name">Nom :</label>
               <input type="text" class="form-control" id="name" name="name" value="<?php echo $name; ?>">
             </div>
-            <div class="form-group">
+            <div class="form-group mt-2">
               <label class="form-label" for="email">E-mail :</label>
               <input type="email" class="form-control" id="email" name="email" value="<?php echo $email; ?>">
             </div>
-            <div class="form-group">
+            <div class="form-group mt-2">
               <label class="form-label" for="message">Message :</label>
               <textarea class="form-control" id="message" name="message"><?php echo $message; ?></textarea>
             </div>
