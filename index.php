@@ -22,16 +22,16 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
-          <li class="nav-item">
+          <li class="nav-item me-4">
             <a class="nav-link" href="#about">About</a>
           </li>
-          <li class="nav-item">
+          <li class="nav-item me-4">
             <a class="nav-link" href="#courses">Courses</a>
           </li>
-          <li class="nav-item">
+          <li class="nav-item me-4">
             <a class="nav-link" href="#team">Instructors</a>
           </li>
-          <li class="nav-item">
+          <li class="nav-item me-4">
             <a class="nav-link" href="#contact">Contact</a>
           </li>
         </ul>
