@@ -78,7 +78,7 @@
   </section>
 
 
-  <section id="courses" class="bg-light pt-5 pb-5 mb-4">
+  <section id="courses" class="bg-light pt-5 pb-5">
     <div class="container">
       <h2 class="text-center pb-3">Nos Cours</h2>
       <div class="row">
@@ -144,35 +144,56 @@
     </div>
   </section>
 
-  <section id="team" class="mb-5 mt-5">
-    <div class="container">
-      <h2 class="text-center pb-4">Nos Instructeurs</h2>
-      <div class="row">
-        <?php
-        // Récupérer les instructeurs depuis la base de données
-        $instructorsSql = "SELECT instructor_name, instructor_description, instructor_image FROM instructors";
-        $instructorsResult = mysqli_query($conn, $instructorsSql);
+  <section id="team" class="mb-5 bg-dark text-white pt-5 pb-5">
+  <div class="container">
+    <h2 class="text-center pb-4">Nos Instructeurs</h2>
+    <div class="row">
+      <div class="col-md-12">
+        <div id="instructorsCarousel" class="carousel slide" data-bs-ride="carousel">
+          <div class="carousel-inner">
+            <?php
+            // Récupérer les instructeurs depuis la base de données
+            $instructorsSql = "SELECT instructor_name, instructor_description, instructor_image FROM instructors";
+            $instructorsResult = mysqli_query($conn, $instructorsSql);
 
-        while ($instructorRow = mysqli_fetch_assoc($instructorsResult)) {
-          $instructorName = $instructorRow['instructor_name'];
-          $instructorDescription = $instructorRow['instructor_description'];
-          $instructorImage = $instructorRow['instructor_image'];
-        ?>
-          <div class="col-md-4">
-            <div class="card mb-4">
-              <img src="admin/<?php echo $instructorImage; ?>" alt="<?php echo $instructorName; ?>" class="card-img-top" style="object-fit: cover; height: 300px;" />
-              <div class="card-body">
-                <h5 class="card-title"><?php echo $instructorName; ?></h5>
-                <p class="card-text"><?php echo $instructorDescription; ?></p>
+            $active = true;
+            while ($instructorRow = mysqli_fetch_assoc($instructorsResult)) {
+              $instructorName = $instructorRow['instructor_name'];
+              $instructorDescription = $instructorRow['instructor_description'];
+              $instructorImage = $instructorRow['instructor_image'];
+            ?>
+              <div class="carousel-item <?php if ($active) echo 'active'; ?>">
+                <div class="row justify-content-center">
+                  <div class="col-md-4">
+                    <div class="card mb-4 align-items-center" style="background-color: transparent; border: none;" >
+                      <img src="admin/<?php echo $instructorImage; ?>" alt="<?php echo $instructorName; ?>" class="card-img-top"style="overflow: hidden; height: 200px; width: 200px; border-radius: 50%; background-color: transparent; display: flex; align-items: center; justify-content: center; border: none;" />
+                      <div class="card-body">
+                        <h5 class="card-title text-white text-center"><?php echo $instructorName; ?></h5>
+                        <p class="card-text text-white text-center"><?php echo $instructorDescription; ?></p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
-            </div>
+            <?php
+              $active = false;
+            }
+            ?>
           </div>
-        <?php
-        }
-        ?>
+          <button class="carousel-control-prev" type="button" data-bs-target="#instructorsCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#instructorsCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+        </div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
+
 
   <?php
   // Connexion à la base de données
