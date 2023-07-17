@@ -12,71 +12,70 @@
 </head>
 
 <body>
-<header>
-  <!-- Navbar Bootstrap -->
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container">
-      <a class="navbar-brand" href="#"><img src="img/logo.png" alt="" srcset="" width="100px" height="82px"></a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item me-4">
-            <a class="nav-link" href="#about">À propos</a>
-          </li>
-          <li class="nav-item me-4">
-            <a class="nav-link" href="#courses">Cours</a>
-          </li>
-          <li class="nav-item me-4">
-            <a class="nav-link" href="#team">Instructeurs</a>
-          </li>
-          <li class="nav-item me-4">
-            <a class="nav-link" href="#contact">Contact</a>
-          </li>
-        </ul>
+  <header>
+    <!-- Navbar Bootstrap -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container">
+        <a class="navbar-brand" href="#"><img src="img/logo.png" alt="" srcset="" width="100px" height="82px"></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item me-4">
+              <a class="nav-link" href="#about">À propos</a>
+            </li>
+            <li class="nav-item me-4">
+              <a class="nav-link" href="#courses">Cours</a>
+            </li>
+            <li class="nav-item me-4">
+              <a class="nav-link" href="#team">Instructeurs</a>
+            </li>
+            <li class="nav-item me-4">
+              <a class="nav-link" href="#contact">Contact</a>
+            </li>
+          </ul>
+        </div>
       </div>
-    </div>
-  </nav>
-</header>
+    </nav>
+  </header>
 
 
   <section class="jumbotron text-center">
-    <div class="row">
-      <div class="col-md-12">
-        <div class="position-relative">
-          <img src="img/352499042_3260409140926278_8767796183506052124_n.jpg" class="img-fluid" alt="Image de bienvenue" style="object-fit: cover; filter: brightness(70%); width: 100vw; height: 100vh;">
-          <!-- <div class="container"> -->
-          <div class="position-absolute top-50 start-50 translate-middle">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="position-relative">
+            <img src="img/352499042_3260409140926278_8767796183506052124_n.jpg" class="img-fluid" alt="Image de bienvenue" style="object-fit: cover; filter: brightness(70%); width: 100vw; height: 100vh;">
+            <!-- <div class="container"> -->
+            <div class="position-absolute top-50 start-50 translate-middle">
               <h1 class="text-white">Bienvenue à l'Académie Maram School</h1>
               <p class="lead text-white">Découvrez notre large gamme de cours et nos instructeurs experts.</p>
               <a href="#about" class="btn btn-primary">En savoir plus</a>
             </div>
-        <!-- </div> -->
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
 
-<section id="about">
-  <div class="container mt-5 mb-5">
-    <div class="row">
-      <div class="col-md-6 d-flex align-items-center">
-        <div class="text-center">
-          <h2>À Propos</h2>
+  <section id="about" class="mt-5 mb-5">
+    <div class="container ">
+      <h2 style="text-align:center">À propos</h2>
+      <div class="row pt-5 pb-5">
+        <div class="col-md-6 ">
+          <img src="img/352499042_3260409140926278_8767796183506052124_n.jpg" alt="Image à propos" class="shadow-lg rounded mx-auto d-block img-fluid" style="border-radius: 25% !important; max-height:460px;">
+        </div>
+        <div class="col-md-6 m-md-auto mt-4">
+          <h2 style="text-align:center">À propos</h2>
           <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus
-            convallis suscipit tellus id aliquet.
+            Nous sommes une académie d'apprentissage en ligne dédiée à fournir une éducation de qualité dans divers domaines. Notre mission est d'offrir des cours exceptionnels dispensés par des instructeurs expérimentés, afin de permettre à nos étudiants d'acquérir les compétences nécessaires pour réussir dans leur parcours professionnel. Que vous soyez un débutant cherchant à acquérir de nouvelles connaissances ou un professionnel souhaitant approfondir vos compétences, notre large gamme de cours saura répondre à vos besoins. Rejoignez-nous dès aujourd'hui et découvrez l'excellence de l'apprentissage en ligne avec l'Academy Maram School.
           </p>
         </div>
       </div>
-      <div class="col-md-6 d-flex align-items-center">
-        <img src="img/352499042_3260409140926278_8767796183506052124_n.jpg" alt="Image à propos" class="img-fluid" style="max-width: 100%; max-height: auto;">
-      </div>
     </div>
-  </div>
-</section>
+  </section>
 
 
   <section id="courses" class="bg-light pt-5 pb-5 mb-4">
@@ -214,52 +213,52 @@
   ?>
 
 
-<section id="contact">
-  <div class="container mt-5 mb-5">
-    <h2 class="text-center">Contactez-nous</h2>
+  <section id="contact">
+    <div class="container mt-5 mb-5">
+      <h2 class="text-center">Contactez-nous</h2>
 
-    <?php if (!empty($successMessage)) { ?>
-      <div class="alert alert-success" role="alert">
-        <?php echo $successMessage; ?>
-      </div>
-    <?php } ?>
-
-    <div class="row justify-content-center">
-      <div class="col-md-6">
-        <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-          <div class="form-group">
-            <label class="form-label" for="name">Nom :</label>
-            <input type="text" class="form-control" id="name" name="name" value="<?php echo $name; ?>">
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="email">E-mail :</label>
-            <input type="email" class="form-control" id="email" name="email" value="<?php echo $email; ?>">
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="message">Message :</label>
-            <textarea class="form-control" id="message" name="message"><?php echo $message; ?></textarea>
-          </div>
-          <button type="submit" class="btn btn-primary mt-3">Envoyer</button>
-        </form>
-      </div>
-    </div>
-  </div>
-
-  <!-- Modal de succès -->
-  <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="successModalLabel">Message envoyé</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      <?php if (!empty($successMessage)) { ?>
+        <div class="alert alert-success" role="alert">
+          <?php echo $successMessage; ?>
         </div>
-        <div class="modal-body">
-          <p>Votre message a été envoyé avec succès. Nous vous répondrons bientôt.</p>
+      <?php } ?>
+
+      <div class="row justify-content-center">
+        <div class="col-md-6">
+          <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+            <div class="form-group">
+              <label class="form-label" for="name">Nom :</label>
+              <input type="text" class="form-control" id="name" name="name" value="<?php echo $name; ?>">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="email">E-mail :</label>
+              <input type="email" class="form-control" id="email" name="email" value="<?php echo $email; ?>">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="message">Message :</label>
+              <textarea class="form-control" id="message" name="message"><?php echo $message; ?></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary mt-3">Envoyer</button>
+          </form>
         </div>
       </div>
     </div>
-  </div>
-</section>
+
+    <!-- Modal de succès -->
+    <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="successModalLabel">Message envoyé</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p>Votre message a été envoyé avec succès. Nous vous répondrons bientôt.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
 
   <footer class="footer bg-dark text-white pt-5 mt-4 pb-5">
