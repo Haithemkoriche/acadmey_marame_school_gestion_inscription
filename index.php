@@ -42,14 +42,14 @@
 
 
   <section class="jumbotron text-center" style="position: relative; padding: 0;">
-  <img src="img/352499042_3260409140926278_8767796183506052124_n.jpg" class="img-fluid" alt="Image de bienvenue" style="object-fit: cover; width: 100%; height: 100vh;">
-  <div class="container position-absolute top-50 start-50 translate-middle" style="transform: translate(-50%, -50%);">
-    <h1 class="text-white">Bienvenue à l'Académie Maram School</h1>
-    <p class="lead text-white">Découvrez notre large gamme de cours et nos instructeurs experts.</p>
-    <a href="#about" class="btn btn-primary">En savoir plus</a>
-  </div>
-</section>
-  
+    <img src="img/352499042_3260409140926278_8767796183506052124_n.jpg" class="img-fluid" alt="Image de bienvenue" style="object-fit: cover; width: 100%; height: 100vh;">
+    <div class="container position-absolute top-50 start-50 translate-middle" style="transform: translate(-50%, -50%);">
+      <h1 class="text-white">Bienvenue à l'Académie Maram School</h1>
+      <p class="lead text-white">Découvrez notre large gamme de cours et nos instructeurs experts.</p>
+      <a href="#about" class="btn btn-primary">En savoir plus</a>
+    </div>
+  </section>
+
 
 
 
@@ -69,7 +69,6 @@
       </div>
     </div>
   </section>
-
 
   <section id="courses" class="pt-5 pb-5">
     <div class="container">
@@ -113,10 +112,24 @@
                       <label class="form-label" for="student_name">Votre nom</label>
                       <input type="text" class="form-control" id="student_name" name="student_name" required>
                     </div>
+                    <div class="mb-3">
+                      <label class="form-label" for="student_firstname">Votre prénom</label>
+                      <input type="text" class="form-control" id="student_firstname" name="student_firstname" required>
+                    </div>
 
                     <div class="mb-3">
                       <label class="form-label" for="student_email">Votre e-mail</label>
                       <input type="email" class="form-control" id="student_email" name="student_email" required>
+                    </div>
+
+                    <div class="mb-3">
+                      <label class="form-label" for="student_phone">Votre numéro de téléphone</label>
+                      <input type="tel" class="form-control" id="student_phone" name="student_phone" required>
+                    </div>
+
+                    <div class="mb-3">
+                      <label class="form-label" for="student_dob">Votre date de naissance</label>
+                      <input type="date" class="form-control" id="student_dob" name="student_dob" required>
                     </div>
 
                     <!-- Ajoutez plus de champs d'inscription ici -->
@@ -137,66 +150,76 @@
     </div>
   </section>
 
-  <section id="team" class="mb-5 bg-dark text-white pt-5 pb-5">
-  <div class="container">
-    <h2 class="text-center pb-4">Nos Instructeurs</h2>
-    <div class="row">
-      <div class="col-md-12">
-        <div id="instructorsCarousel" class="carousel slide" data-bs-ride="carousel">
-          <div class="carousel-inner">
-            <?php
-            // Récupérer les instructeurs depuis la base de données
-            $instructorsSql = "SELECT instructor_name, instructor_description, instructor_image FROM instructors";
-            $instructorsResult = mysqli_query($conn, $instructorsSql);
+  <?php
+  // Vérifier si le formulaire d'inscription a été soumis
+  if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $courseId = $_POST['course_id'];
+    $studentName = $_POST['student_name'];
+    $studentEmail = $_POST['student_email'];
+    $studentPhone = $_POST['student_phone'];
+    $studentDOB = $_POST['student_dob'];
+    $studentFirstName = $_POST['student_firstname'];
 
-            $active = true;
-            while ($instructorRow = mysqli_fetch_assoc($instructorsResult)) {
-              $instructorName = $instructorRow['instructor_name'];
-              $instructorDescription = $instructorRow['instructor_description'];
-              $instructorImage = $instructorRow['instructor_image'];
-            ?>
-              <div class="carousel-item <?php if ($active) echo 'active'; ?>">
-                <div class="row justify-content-center">
-                  <div class="col-md-4">
-                    <div class="card mb-4 align-items-center" style="background-color: transparent; border: none;" >
-                      <img src="admin/<?php echo $instructorImage; ?>" alt="<?php echo $instructorName; ?>" class="card-img-top"style="overflow: hidden; height: 200px; width: 200px; border-radius: 50%; background-color: transparent; display: flex; align-items: center; justify-content: center; border: none;" />
-                      <div class="card-body">
-                        <h5 class="card-title text-white text-center"><?php echo $instructorName; ?></h5>
-                        <p class="card-text text-white text-center"><?php echo $instructorDescription; ?></p>
+    // Insertion des données dans la table demande_ins
+    $insertSql = "INSERT INTO demande_ins (course_id, nom_ins, prenom_ins, email_ins, numero_telephone_ins, date_naissance_ins) VALUES ('$courseId', '$studentName', '$studentFirstName', '$studentEmail', '$studentPhone', '$studentDOB')";
+    mysqli_query($conn, $insertSql);
+  }
+  ?>
+
+
+  <section id="team" class="mb-5 bg-dark text-white pt-5 pb-5">
+    <div class="container">
+      <h2 class="text-center pb-4">Nos Instructeurs</h2>
+      <div class="row">
+        <div class="col-md-12">
+          <div id="instructorsCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+              <?php
+              // Récupérer les instructeurs depuis la base de données
+              $instructorsSql = "SELECT instructor_name, instructor_description, instructor_image FROM instructors";
+              $instructorsResult = mysqli_query($conn, $instructorsSql);
+
+              $active = true;
+              while ($instructorRow = mysqli_fetch_assoc($instructorsResult)) {
+                $instructorName = $instructorRow['instructor_name'];
+                $instructorDescription = $instructorRow['instructor_description'];
+                $instructorImage = $instructorRow['instructor_image'];
+              ?>
+                <div class="carousel-item <?php if ($active) echo 'active'; ?>">
+                  <div class="row justify-content-center">
+                    <div class="col-md-4">
+                      <div class="card mb-4 align-items-center" style="background-color: transparent; border: none;">
+                        <img src="admin/<?php echo $instructorImage; ?>" alt="<?php echo $instructorName; ?>" class="card-img-top" style="overflow: hidden; height: 200px; width: 200px; border-radius: 50%; background-color: transparent; display: flex; align-items: center; justify-content: center; border: none;" />
+                        <div class="card-body">
+                          <h5 class="card-title text-white text-center"><?php echo $instructorName; ?></h5>
+                          <p class="card-text text-white text-center"><?php echo $instructorDescription; ?></p>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            <?php
-              $active = false;
-            }
-            ?>
+              <?php
+                $active = false;
+              }
+              ?>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#instructorsCarousel" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#instructorsCarousel" data-bs-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Next</span>
+            </button>
           </div>
-          <button class="carousel-control-prev" type="button" data-bs-target="#instructorsCarousel" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-          </button>
-          <button class="carousel-control-next" type="button" data-bs-target="#instructorsCarousel" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-          </button>
         </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
 
   <?php
-  // Connexion à la base de données
-  $conn = mysqli_connect("localhost", "root", "", "ams");
-
-  // Vérification de la connexion
-  if (!$conn) {
-    die("Connection failed: " . mysqli_connect_error());
-  }
-
+  
   // Variables pour stocker les valeurs du formulaire
   $name = "";
   $email = "";

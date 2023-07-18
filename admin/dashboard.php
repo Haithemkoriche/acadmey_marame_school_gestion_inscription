@@ -74,63 +74,80 @@
           <p>Here you can manage various administrative tasks.</p>
         </div>
 
-        <!-- Registrations -->
-        <div id="registrations" class="content">
-          <h1>Registrations</h1>
+<!-- Registrations -->
+<div id="registrations" class="content">
+  <h1>Registrations</h1>
 
-          <?php
+  <?php
+  // Vérification des actions de validation et de suppression
+  if (isset($_POST['action_reg'])) {
+    $id = $_POST['id'];
+    $action = $_POST['action_reg'];
 
+    if ($action === 'validate') {
+      // Effectuer des opérations de validation ici
+      $sql = "SELECT * FROM demande_ins WHERE id_ins = $id";
+      $result = mysqli_query($conn, $sql);
 
-          // Vérification des actions de validation et de suppression
-          if (isset($_POST['action_reg'])) {
-            $id = $_POST['id'];
-            $action = $_POST['action_reg'];
+      if (mysqli_num_rows($result) > 0) {
+        $row = mysqli_fetch_assoc($result);
 
-            if ($action === 'validate') {
-              // Effectuer des opérations de validation ici
-              $sql = "SELECT * FROM demande_ins WHERE id_ins = $id";
-              $result = mysqli_query($conn, $sql);
-
-              if (mysqli_num_rows($result) > 0) {
-                $row = mysqli_fetch_assoc($result);
-
-                // Insérer les informations dans la table des étudiants
-                $sql = "INSERT INTO etudiants (nom_etu, prenom_etu, date_naissance_etu, numero_telephone_etu, email_etu) 
+        // Insérer les informations dans la table des étudiants
+        $sql = "INSERT INTO etudiants (nom_etu, prenom_etu, date_naissance_etu, numero_telephone_etu, email_etu) 
                 VALUES ('{$row['nom_ins']}', '{$row['prenom_ins']}', '{$row['date_naissance_ins']}', '{$row['numero_telephone_ins']}', '{$row['email_ins']}')";
 
-                if (mysqli_query($conn, $sql)) {
-                  // Supprimer la demande d'inscription
-                  $sql = "DELETE FROM demande_ins WHERE id_ins = $id";
+        if (mysqli_query($conn, $sql)) {
+          $studentId = mysqli_insert_id($conn); // Get the last inserted student ID
 
-                  if (mysqli_query($conn, $sql)) {
-                    echo "Registration validated and added to students.";
-                  } else {
-                    echo "Error deleting registration: " . mysqli_error($conn);
-                  }
-                } else {
-                  echo "Error inserting student: " . mysqli_error($conn);
-                }
-              } else {
-                echo "Registration not found.";
-              }
-            } elseif ($action === 'delete') {
-              // Effectuer des opérations de suppression ici
-              $sql = "DELETE FROM demande_ins WHERE id_ins = $id";
+          // Insert the link between student, instructor, and course in the etudiant_speciality table
+          $sql = "INSERT INTO etudiant_speciality (id_etudiant, id_instructor, id_course, date_debut, date_fin) 
+                  VALUES ('$studentId', '{$row['id_instructor']}', '{$row['course_id']}', '{$row['date_debut']}', '{$row['date_fin']}')";
 
-              if (mysqli_query($conn, $sql)) {
-                echo "Registration deleted.";
-              } else {
-                echo "Error deleting registration: " . mysqli_error($conn);
-              }
-            }
+          if (mysqli_query($conn, $sql)) {
+            // Registration and link created successfully
+            echo "Registration validated and added to students.";
+          } else {
+            // Error inserting the link
+            echo "Error inserting link: " . mysqli_error($conn);
           }
+        } else {
+          // Error inserting student
+          echo "Error inserting student: " . mysqli_error($conn);
+        }
 
-          // Récupération des demandes d'inscription
-          $sql = "SELECT * FROM demande_ins";
-          $result = mysqli_query($conn, $sql);
+        // Remove the registration from demande_ins table
+        $sql = "DELETE FROM demande_ins WHERE id_ins = $id";
 
-          if (mysqli_num_rows($result) > 0) {
-            echo '<table class="table">
+        if (mysqli_query($conn, $sql)) {
+          echo "Registration removed from requests.";
+        } else {
+          echo "Error removing registration: " . mysqli_error($conn);
+        }
+      } else {
+        echo "Registration not found.";
+      }
+    } elseif ($action === 'delete') {
+      // Effectuer des opérations de suppression ici
+      $sql = "DELETE FROM demande_ins WHERE id_ins = $id";
+
+      if (mysqli_query($conn, $sql)) {
+        echo "Registration deleted.";
+      } else {
+        echo "Error deleting registration: " . mysqli_error($conn);
+      }
+    }
+  }
+
+  // Récupération des demandes d'inscription avec les noms de cours et instructeurs
+  $sql = "SELECT di.id_ins, di.nom_ins, di.prenom_ins, di.date_naissance_ins, di.numero_telephone_ins, di.email_ins, c.course_name, i.instructor_name, es.date_debut, es.date_fin
+          FROM demande_ins di
+          INNER JOIN courses c ON di.course_id = c.course_id
+          INNER JOIN etudiant_speciality es ON di.id_ins = es.id_etudiant
+          INNER JOIN instructors i ON c.instructor_id = i.instructor_id";
+  $result = mysqli_query($conn, $sql);
+
+  if (mysqli_num_rows($result) > 0) {
+    echo '<table class="table">
             <thead>
               <tr>
                 <th>ID</th>
@@ -139,42 +156,51 @@
                 <th>Date de Naissance</th>
                 <th>Numéro de Téléphone</th>
                 <th>Email</th>
+                <th>Cours</th>
+                <th>Instructeur</th>
+                <th>Date de Début</th>
+                <th>Date de Fin</th>
                 <th>Action</th>
               </tr>
             </thead>
             <tbody>';
 
-            while ($row = mysqli_fetch_assoc($result)) {
-              echo '<tr>';
-              echo '<td>' . $row["id_ins"] . '</td>';
-              echo '<td>' . $row["nom_ins"] . '</td>';
-              echo '<td>' . $row["prenom_ins"] . '</td>';
-              echo '<td>' . $row["date_naissance_ins"] . '</td>';
-              echo '<td>' . $row["numero_telephone_ins"] . '</td>';
-              echo '<td>' . $row["email_ins"] . '</td>';
-              echo '<td>
-              <form method="POST" action="">
-                <input type="hidden" name="id" value="' . $row["id_ins"] . '">
-                <input type="hidden" name="actioni_reg" value="validate">
-                <button type="submit" class="btn btn-success mr-2">Validate</button>
-              </form>
-              <form method="POST" action="">
-                <input type="hidden" name="id" value="' . $row["id_ins"] . '">
-                <input type="hidden" name="action_reg" value="delete">
-                <button type="submit" class="btn btn-danger">Delete</button>
-              </form>
-            </td>';
-              echo '</tr>';
-            }
+    while ($row = mysqli_fetch_assoc($result)) {
+      echo '<tr>';
+      echo '<td>' . $row["id_ins"] . '</td>';
+      echo '<td>' . $row["nom_ins"] . '</td>';
+      echo '<td>' . $row["prenom_ins"] . '</td>';
+      echo '<td>' . $row["date_naissance_ins"] . '</td>';
+      echo '<td>' . $row["numero_telephone_ins"] . '</td>';
+      echo '<td>' . $row["email_ins"] . '</td>';
+      echo '<td>' . $row["course_name"] . '</td>';
+      echo '<td>' . $row["instructor_name"] . '</td>';
+      echo '<td>' . $row["date_debut"] . '</td>';
+      echo '<td>' . $row["date_fin"] . '</td>';
+      echo '<td>
+            <form method="POST" action="">
+              <input type="hidden" name="id" value="' . $row["id_ins"] . '">
+              <input type="hidden" name="action_reg" value="validate">
+              <button type="submit" class="btn btn-success mr-2">Validate</button>
+            </form>
+            <form method="POST" action="">
+              <input type="hidden" name="id" value="' . $row["id_ins"] . '">
+              <input type="hidden" name="action_reg" value="delete">
+              <button type="submit" class="btn btn-danger">Delete</button>
+            </form>
+          </td>';
+      echo '</tr>';
+    }
 
-            echo '</tbody></table>';
-          } else {
-            echo '<p>No registrations found.</p>';
-          }
+    echo '</tbody></table>';
+  } else {
+    echo '<p>No registrations found.</p>';
+  }
+  ?>
+</div>
 
 
-          ?>
-        </div>
+
 
 
         <!-- Contacts -->
