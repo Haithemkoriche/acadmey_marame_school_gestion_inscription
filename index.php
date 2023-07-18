@@ -51,10 +51,8 @@
   </section>
 
 
-
-
   <section id="about" class="bg-light pt-5 pb-5 mb-5">
-    <div class="container ">
+    <div class="container">
       <h2 style="text-align:center">À propos</h2>
       <div class="row pt-5 pb-5">
         <div class="col-md-6 ">
@@ -153,16 +151,24 @@
   <?php
   // Vérifier si le formulaire d'inscription a été soumis
   if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $courseId = $_POST['course_id'];
-    $studentName = $_POST['student_name'];
-    $studentEmail = $_POST['student_email'];
-    $studentPhone = $_POST['student_phone'];
-    $studentDOB = $_POST['student_dob'];
-    $studentFirstName = $_POST['student_firstname'];
+    @$courseId = $_POST['course_id'];
+    @$studentName = $_POST['student_name'];
+    @$studentEmail = $_POST['student_email'];
+    @$studentPhone = $_POST['student_phone'];
+    @$studentDOB = $_POST['student_dob'];
+    @$studentFirstName = $_POST['student_firstname'];
 
-    // Insertion des données dans la table demande_ins
-    $insertSql = "INSERT INTO demande_ins (course_id, nom_ins, prenom_ins, email_ins, numero_telephone_ins, date_naissance_ins) VALUES ('$courseId', '$studentName', '$studentFirstName', '$studentEmail', '$studentPhone', '$studentDOB')";
-    mysqli_query($conn, $insertSql);
+    // Vérifier si le course_id existe dans la table "courses"
+    $courseCheckSql = "SELECT COUNT(*) AS count FROM courses WHERE course_id = '$courseId'";
+    $courseCheckResult = mysqli_query($conn, $courseCheckSql);
+    $courseCheckRow = mysqli_fetch_assoc($courseCheckResult);
+    $courseCount = $courseCheckRow['count'];
+
+    if ($courseCount > 0) {
+      // Insertion des données dans la table "demande_ins"
+      $insertSql = "INSERT INTO demande_ins (course_id, nom_ins, prenom_ins, email_ins, numero_telephone_ins, date_naissance_ins) VALUES ('$courseId', '$studentName', '$studentFirstName', '$studentEmail', '$studentPhone', '$studentDOB')";
+      mysqli_query($conn, $insertSql);
+    }
   }
   ?>
 
@@ -219,7 +225,7 @@
 
 
   <?php
-  
+
   // Variables pour stocker les valeurs du formulaire
   $name = "";
   $email = "";
@@ -328,16 +334,15 @@
         <div class="col-md-4">
           <h4>Emplacement</h4>
           <div class="map-responsive">
-            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3196.4675560994906!2d2.9644917152887675!3d36.75934947995714!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x128fb103f8943f9d%3A0x97e9de1c24190320!2sAcademy%20Maram%20School!5e0!3m2!1sen!2sdz!4v1689560554708!5m2!1sen!2sdz" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3196.4675560994906!2d2.9644917152887675!3d36.75934947995714!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x128fb103f8943f9d%3A0x97e9de1c24190320!2sAcademy%20Maram%20School!5e0!3m2!1sen!2sdz!4v1689560554708!5m2!1sen!2sdz" width="400" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
           </div>
         </div>
       </div>
     </div>
   </footer>
 
-
-  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
   <script src="asstes/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="asstes/fonts/js/all.min.js"></script>
 </body>
 
 </html>

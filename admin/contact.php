@@ -6,30 +6,29 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="../asstes/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="../asstes/fonts/css/all.min.css">
+
   <title>Dashboard</title>
 </head>
 
 <body>
-  <!-- Navbar -->
+  <!-- Barre de navigation -->
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container">
-      <a class="navbar-brand" href="#">Dashboard</a>
+      <a class="navbar-brand" href="#">Tableau de bord</a>
       <ul class="navbar-nav ml-auto">
-        <li class="nav-item">
-          <span class="nav-link">Logged in as Admin</span>
+        <li class="nav-item me-3">
+          <a class="nav-link" href="#">Voir le site</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">View Site</a>
-        </li>
-        <li class="nav-item">
-          <button id="btn-logout" class="btn btn-link nav-link">Logout</button>
+        <li class="nav-item me-3">
+          <button id="btn-logout" class="btn btn-link nav-link">Déconnexion</button>
         </li>
       </ul>
     </div>
   </nav>
   <!-- Contacts -->
   <div id="contacts" class="content container mt-5 mb-5">
-    <h1>Contacts</h1>
+    <h1> <a class="nav-link" href="../admin.php"><i class="fa fa-arrow-left"></i> </a>Contacts</h1>
 
     <?php
 
@@ -70,7 +69,7 @@
         echo '<td>' . $row["email_contact"] . '</td>';
         echo '<td>' . $row["message_contact"] . '</td>';
         echo '<td>
-              <a href="?delete_ms=' . $row["id_contact"] . '" class="btn btn-danger" onclick="return confirm(\'Are you sure you want to delete this message?\')">Delete</a>
+              <a href="?delete_ms=' . $row["id_contact"] . '" class="btn btn-danger" onclick="return confirm(\'Are you sure you want to delete this message?\')"><i class="fas fa-trash"></i></a>
             </td>';
         echo '</tr>';
       }
