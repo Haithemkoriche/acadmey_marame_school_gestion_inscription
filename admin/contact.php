@@ -28,7 +28,7 @@
   </nav>
   <!-- Contacts -->
   <div id="contacts" class="content container mt-5 mb-5">
-    <h1> <a class="nav-link" href="../admin.php"><i class="fa fa-arrow-left"></i> </a>Contacts</h1>
+    <h1> <a class="nav-link" href="admin.php"><i class="fa fa-arrow-left"></i> </a>Contacts</h1>
 
     <?php
 
