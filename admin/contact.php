@@ -1,3 +1,13 @@
+<?php
+session_start();
+
+// Vérifier si l'utilisateur n'est pas authentifié
+if (!isset($_SESSION["username"])) {
+  // Rediriger vers la page de connexion
+  header("Location: index.php");
+  exit;
+}
+?>
 <?php require_once "../config/bdd.php"; ?>
 <!DOCTYPE html>
 <html lang="en">
