@@ -281,6 +281,27 @@
 
 
 
+ <!-- Logout Modal -->
+ <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="logoutModalLabel">Confirmer la déconnexion</h5>
+            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Fermer">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>Êtes-vous sûr(e) de vouloir vous déconnecter ?</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+            <a href="logout.php" class="btn btn-primary">Déconnexion</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
 
 
 
@@ -288,34 +309,13 @@
   <script src="../asstes/bootstrap/js/bootstrap.min.js"></script>
   <script>
     $(document).ready(function() {
-      // Gérer la navigation en fonction des clics sur les liens du menu
-      $('.nav-link').click(function() {
-        var target = $(this).data('target');
-        $('.content').hide();
-        $('#' + target).show();
-      });
-
+    
       // Gérer la déconnexion
       $('#btn-logout').click(function() {
         $('#logoutModal').modal('show');
       });
 
-      // Remplir le formulaire de modification d'étudiant avec les données actuelles
-      $('.edit-student').click(function() {
-        var studentId = $(this).data('student-id');
-        var studentName = $(this).closest('tr').find('td:eq(1)').text();
-        var studentEmail = $(this).closest('tr').find('td:eq(4)').text();
-        var studentPhone = $(this).closest('tr').find('td:eq(3)').text();
-        var studentCourse = $(this).closest('tr').find('td:eq(6)').text();
-        var studentStartDate = $(this).closest('tr').find('td:eq(7)').text();
-
-        $('#edit_student_id').val(studentId);
-        $('#edit_student_name').val(studentName);
-        $('#edit_student_email').val(studentEmail);
-        $('#edit_student_phone').val(studentPhone);
-        $('#edit_student_course').val(studentCourse);
-        $('#edit_student_start_date').val(studentStartDate);
-      });
+      
     });
   </script>
 </body>

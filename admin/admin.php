@@ -40,7 +40,7 @@
     <div class="container">
       <a class="navbar-brand" href="#">Tableau de bord</a>
       <ul class="navbar-nav ml-auto">
-     
+
         <li class="nav-item me-3">
           <a class="nav-link" href="#">Voir le site</a>
         </li>
@@ -57,8 +57,8 @@
         <div class="card">
           <img src="../img/demand_ins.jpg" class="card-img-top" alt="Image Inscriptions">
           <div class="card-body">
-            <h5 class="card-title">Demandes d'Inscriptions</h5> 
-            <a class="btn btn-primary" href="di/" data-target="registrations">Voir</a>
+            <h5 class="card-title">Demandes d'Inscriptions</h5>
+            <a class="btn btn-primary" href="di.php" data-target="registrations">Voir</a>
           </div>
         </div>
       </div>
@@ -94,25 +94,40 @@
           <img src="../img/video_bg.jpg" class="card-img-top" alt="Image Formateurs">
           <div class="card-body">
             <h5 class="card-title">Formateurs</h5>
-            <a class="btn btn-primary" href="#" data-target="instructors">Voir</a>
+            <a class="btn btn-primary" href="formateur.php" data-target="instructors">Voir</a>
           </div>
         </div>
       </div>
       <!-- Ajoutez d'autres cartes pour les fonctions d'administration -->
     </div>
   </div>
+ <!-- Logout Modal -->
+ <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="logoutModalLabel">Confirmer la déconnexion</h5>
+            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Fermer">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>Êtes-vous sûr(e) de vouloir vous déconnecter ?</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+            <a href="logout.php" class="btn btn-primary">Déconnexion</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="../asstes/bootstrap/js/bootstrap.min.js"></script>
   <script>
     $(document).ready(function() {
-      // Gérer la navigation en fonction des clics sur les liens du menu
-      $('.nav-link').click(function() {
-        var target = $(this).data('target');
-        $('.content').hide();
-        $('#' + target).show();
-      });
-
+      
       // Gérer la déconnexion
       $('#btn-logout').click(function() {
         $('#logoutModal').modal('show');
