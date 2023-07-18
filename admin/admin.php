@@ -76,7 +76,7 @@
           <img src="../img/etudiants.avif" class="card-img-top" alt="Image Étudiants">
           <div class="card-body">
             <h5 class="card-title">Étudiants</h5>
-            <a class="btn btn-primary" href="#" data-target="students">Voir</a>
+            <a class="btn btn-primary" href="etudiant.php" data-target="students">Voir</a>
           </div>
         </div>
       </div>
@@ -85,7 +85,7 @@
           <img src="../img/become_a_student_inline.jpg" class="card-img-top" alt="Image Cours">
           <div class="card-body">
             <h5 class="card-title">Cours</h5>
-            <a class="btn btn-primary" href="#" data-target="courses">Voir</a>
+            <a class="btn btn-primary" href="cours.php" data-target="courses">Voir</a>
           </div>
         </div>
       </div>
