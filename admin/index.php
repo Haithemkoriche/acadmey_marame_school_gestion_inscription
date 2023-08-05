@@ -107,6 +107,8 @@ function createAdmin($username, $hashedPassword) {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../asstes/bootstrap/css/bootstrap.css">
+  <link rel="stylesheet" href="../asstes/bootstrap/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
   <title>Connexion</title>
 </head>
@@ -131,12 +133,12 @@ function createAdmin($username, $hashedPassword) {
             <label for="password">Mot de passe</label>
             <input type="password" class="form-control" id="password" name="password" required>
           </div>
-          <button type="submit" class="btn btn-primary btn-block">Connexion</button>
+          <button type="submit" class="btn btn-primary btn-block mt-2">Connexion</button>
         </form>
       </div>
     </div>
   </div>
-
+<script src="../asstes/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
