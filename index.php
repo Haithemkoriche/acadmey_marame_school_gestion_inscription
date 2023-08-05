@@ -339,6 +339,8 @@
         </div>
       </div>
     </div>
+  <p style="text-align: center;">Tous droits réservés © 2023 AMS</p>
+
   </footer>
 
   <script src="asstes/bootstrap/js/bootstrap.bundle.min.js"></script>

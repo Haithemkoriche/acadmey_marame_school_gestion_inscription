@@ -113,6 +113,8 @@ if (!isset($_SESSION["username"])) {
       </div>
     </div>
   </div>
+  <p style="text-align: center;">Tous droits réservés © 2023 AMS</p>
+
  <!-- Logout Modal -->
  <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">

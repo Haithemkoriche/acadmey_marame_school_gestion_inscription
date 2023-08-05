@@ -182,6 +182,7 @@ WHERE di.id_ins = $id";
     ?>
   </div>
 
+  <p style="text-align: center;">Tous droits réservés © 2023 AMS</p>
  
  <!-- Logout Modal -->
  <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutModalLabel" aria-hidden="true">

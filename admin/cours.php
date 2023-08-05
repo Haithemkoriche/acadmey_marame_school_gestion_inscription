@@ -289,6 +289,7 @@ if (!isset($_SESSION["username"])) {
 
 
 
+<p style="text-align: center;">Tous droits réservés © 2023 AMS</p>
 
 
  <!-- Logout Modal -->
