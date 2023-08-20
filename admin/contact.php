@@ -42,18 +42,18 @@ if (!isset($_SESSION["username"])) {
 
     <?php
 
-    // Vérification si un message a été supprimé
-    if (isset($_GET['delete_ms'])) {
-      $deleteId = $_GET['delete_ms'];
+      // Vérification si un message a été supprimé
+      if (isset($_GET['delete_ms'])) {
+        $deleteId = $_GET['delete_ms'];
 
-      // Suppression du message de la base de données
-      $deleteSql_ms = "DELETE FROM contact_messages WHERE id_contact = $deleteId";
-      if (mysqli_query($conn, $deleteSql_ms)) {
-        echo '<div class="alert alert-success" role="alert">Message deleted successfully.</div>';
-      } else {
-        echo '<div class="alert alert-danger" role="alert">Error deleting message: ' . mysqli_error($conn) . '</div>';
+        // Suppression du message de la base de données
+        $deleteSql_ms = "DELETE FROM contact_messages WHERE id_contact = $deleteId";
+        if (mysqli_query($conn, $deleteSql_ms)) {
+          echo '<div class="alert alert-success" role="alert">Message deleted successfully.</div>';
+        } else {
+          echo '<div class="alert alert-danger" role="alert">Error deleting message: ' . mysqli_error($conn) . '</div>';
+        }
       }
-    }
 
     // Récupération des messages de contact
     $selectSql = "SELECT * FROM contact_messages";
