@@ -53,53 +53,54 @@ if (!isset($_SESSION["username"])) {
     if (!$conn) {
       die("Échec de la connexion : " . mysqli_connect_error());
     }
-// Vérification si un instructeur a été ajouté ou modifié
-if (isset($_POST['action'])) {
-  $action = $_POST['action'];
+    // Vérification si un instructeur a été ajouté ou modifié
+    if (isset($_POST['action'])) {
+      $action = $_POST['action'];
 
-  if ($action === 'add') {
-    // Récupération des données du formulaire d'ajout
-    $instructorName = $_POST['instructor_name'];
-    $instructorSpecialty = $_POST['instructor_specialty'];
-    $instructorEmail = $_POST['instructor_email'];
-    $instructorPhone = $_POST['instructor_phone'];
-    $instructorDescription = $_POST['instructor_description'];
+      if ($action === 'add') {
+        // Récupération des données du formulaire d'ajout
+        $instructorName = $_POST['instructor_name'];
+        $instructorSpecialty = $_POST['instructor_specialty'];
+        $instructorEmail = $_POST['instructor_email'];
+        $instructorPhone = $_POST['instructor_phone'];
+        $instructorDescription = $_POST['instructor_description'];
 
-    // Récupération du fichier image téléchargé
-    $instructorImage = $_FILES['instructor_image']['name'];
-    $instructorImageTmp = $_FILES['instructor_image']['tmp_name'];
-    $instructorImagePath = 'upload/' . $instructorImage;
+        // Récupération du fichier image téléchargé
+        $instructorImage = $_FILES['instructor_image']['name'];
+        $instructorImageTmp = $_FILES['instructor_image']['tmp_name'];
+        $instructorImagePath = 'upload/' . $instructorImage;
 
-    // Move the uploaded image to the destination folder
-    if (move_uploaded_file($instructorImageTmp, $instructorImagePath)) {
-      // Prepare the insert statement
-      $insertSql = "INSERT INTO instructors (instructor_name, instructor_specialty, instructor_email, instructor_phone, instructor_description, instructor_image)
+        // Move the uploaded image to the destination folder
+        if (move_uploaded_file($instructorImageTmp, $instructorImagePath)) {
+          // Prepare the insert statement
+          $insertSql = "INSERT INTO instructors (instructor_name, instructor_specialty, instructor_email, instructor_phone, instructor_description, instructor_image)
                     VALUES (?, ?, ?, ?, ?, ?)";
 
-      // Create a prepared statement
-      $stmt = mysqli_prepare($conn, $insertSql);
-      // Bind parameters and execute the statement
-      mysqli_stmt_bind_param($stmt, "ssssss", $instructorName, $instructorSpecialty, $instructorEmail, $instructorPhone, $instructorDescription, $instructorImagePath);
+          // Create a prepared statement
+          $stmt = mysqli_prepare($conn, $insertSql);
+          // Bind parameters and execute the statement
+          mysqli_stmt_bind_param($stmt, "ssssss", $instructorName, $instructorSpecialty, $instructorEmail, $instructorPhone, $instructorDescription, $instructorImagePath);
 
-      // Execute the prepared statement
-      if (mysqli_stmt_execute($stmt)) {
-        echo '<div class="alert alert-success" role="alert">Instructeur ajouté avec succès.</div>';
-      } else {
-        echo '<div class="alert alert-danger" role="alert">Erreur lors de l\'ajout de l\'instructeur : ' . mysqli_error($conn) . '</div>';
-      }
-    } else {
-      echo '<div class="alert alert-danger" role="alert">Erreur lors du téléchargement de l\'image de l\'instructeur.</div>';
-    }
-  }
-
- elseif ($action === 'update_ins') {
-        // Récupération des données du formulaire de mise à jour
+          // Execute the prepared statement
+          if (mysqli_stmt_execute($stmt)) {
+            echo '<div class="alert alert-success" role="alert">Instructeur ajouté avec succès.</div>';
+          } else {
+            echo '<div class="alert alert-danger" role="alert">Erreur lors de l\'ajout de l\'instructeur : ' . mysqli_error($conn) . '</div>';
+          }
+        } else {
+          echo '<div class="alert alert-danger" role="alert">Erreur lors du téléchargement de l\'image de l\'instructeur.</div>';
+        }
+      } elseif ($action === 'update_ins') {
+                // Récupération des données du formulaire de mise à jour
         $instructorId = $_POST['instructor_id'];
         $instructorName = $_POST['instructor_name'];
         $instructorSpecialty = $_POST['instructor_specialty'];
         $instructorEmail = $_POST['instructor_email'];
         $instructorPhone = $_POST['instructor_phone'];
         $instructorDescription = $_POST['instructor_description'];
+
+        // Initialize a variable to track if the image should be updated
+        $updateImage = false;
 
         // Vérification si une nouvelle image a été téléchargée
         if (!empty($_FILES['instructor_image']['name'])) {
@@ -109,30 +110,45 @@ if (isset($_POST['action'])) {
           $instructorImagePath = 'upload/' . $instructorImage;
 
           // Déplacement du fichier image vers le dossier de destination
-          move_uploaded_file($instructorImageTmp, $instructorImagePath);
+          if (move_uploaded_file($instructorImageTmp, $instructorImagePath)) {
+            $updateImage = true;
+          } else {
+            echo '<div class="alert alert-danger" role="alert">Erreur lors du téléchargement de l\'image.</div>';
+          }
+        }
 
-          // Mise à jour du chemin de l'image dans la base de données
-          $updateSql_img = "UPDATE instructors SET instructor_image = '$instructorImagePath' WHERE instructor_id = $instructorId";
-          if (mysqli_query($conn, $updateSql_img)) {
+        // Prepare the update statement for instructor details
+        $updateSql_ins = "UPDATE instructors 
+                          SET instructor_name = ?, instructor_specialty = ?, 
+                              instructor_email = ?, instructor_phone = ?,
+                              instructor_description = ?
+                          WHERE instructor_id = ?";
+        $stmt_ins = mysqli_prepare($conn, $updateSql_ins);
+        mysqli_stmt_bind_param($stmt_ins, "sssssi", $instructorName, $instructorSpecialty, $instructorEmail, $instructorPhone, $instructorDescription, $instructorId);
+
+        // Execute the instructor details update
+        if (mysqli_stmt_execute($stmt_ins)) {
+          echo '<div class="alert alert-success" role="alert">Instructeur mis à jour avec succès.</div>';
+        } else {
+          echo '<div class="alert alert-danger" role="alert">Erreur lors de la mise à jour de l\'instructeur : ' . mysqli_error($conn) . '</div>';
+        }
+
+        // Update the image if necessary
+        if ($updateImage) {
+          // Update the image path in the database
+          $updateSql_img = "UPDATE instructors SET instructor_image = ? WHERE instructor_id = ?";
+          $stmt_img = mysqli_prepare($conn, $updateSql_img);
+          mysqli_stmt_bind_param($stmt_img, "si", $instructorImagePath, $instructorId);
+
+          if (mysqli_stmt_execute($stmt_img)) {
             echo '<div class="alert alert-success" role="alert">Image de l\'instructeur mise à jour avec succès.</div>';
           } else {
             echo '<div class="alert alert-danger" role="alert">Erreur lors de la mise à jour de l\'image de l\'instructeur : ' . mysqli_error($conn) . '</div>';
           }
         }
-
-        // Mise à jour de l'instructeur dans la base de données
-        $updateSql_ins = "UPDATE instructors 
-                        SET instructor_name = '$instructorName', instructor_specialty = '$instructorSpecialty', 
-                            instructor_email = '$instructorEmail', instructor_phone = '$instructorPhone',
-                            instructor_description = '$instructorDescription'
-                        WHERE instructor_id = $instructorId";
-        if (mysqli_query($conn, $updateSql_ins)) {
-          echo '<div class="alert alert-success" role="alert">Instructeur mis à jour avec succès.</div>';
-        } else {
-          echo '<div class="alert alert-danger" role="alert">Erreur lors de la mise à jour de l\'instructeur : ' . mysqli_error($conn) . '</div>';
-        }
       }
     }
+
 
     // Vérification si un instructeur a été supprimé
     if (isset($_GET['delete_ins'])) {

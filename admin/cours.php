@@ -117,24 +117,30 @@ if (!isset($_SESSION["username"])) {
           }
         }
 
-        // Mettre à jour le cours dans la base de données
+        // Préparer la mise à jour du cours dans la base de données
         if ($updateImage) {
           $updateSql = "UPDATE courses 
-                      SET course_name = '$courseName', course_description = '$courseDescription', course_image = '$targetFile', instructor_id = $instructorId
-                      WHERE course_id = $courseId";
+                          SET course_name = ?, course_description = ?, course_image = ?, instructor_id = ?
+                          WHERE course_id = ?";
+          $stmt = mysqli_prepare($conn, $updateSql);
+          mysqli_stmt_bind_param($stmt, "ssssi", $courseName, $courseDescription, $targetFile, $instructorId, $courseId);
         } else {
           $updateSql = "UPDATE courses 
-                      SET course_name = '$courseName', course_description = '$courseDescription', instructor_id = $instructorId
-                      WHERE course_id = $courseId";
+                          SET course_name = ?, course_description = ?, instructor_id = ?
+                          WHERE course_id = ?";
+          $stmt = mysqli_prepare($conn, $updateSql);
+          mysqli_stmt_bind_param($stmt, "ssii", $courseName, $courseDescription, $instructorId, $courseId);
         }
 
-        if (mysqli_query($conn, $updateSql)) {
+        // Exécuter la mise à jour du cours
+        if (mysqli_stmt_execute($stmt)) {
           echo '<div class="alert alert-success" role="alert">Cours mis à jour avec succès.</div>';
         } else {
           echo '<div class="alert alert-danger" role="alert">Erreur lors de la mise à jour du cours : ' . mysqli_error($conn) . '</div>';
         }
       }
     }
+
 
     // Vérifier si un cours a été supprimé
     if (isset($_GET['delete'])) {
